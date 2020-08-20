@@ -104,15 +104,17 @@ public class AddressFragment extends Fragment {
         // userAddress = gson.fromJson(localStorage.getUserAddress(), UserAddress.class);
         Log.d("User String : ", userString);
         if (user != null) {
-            CustomerId=user.getId();
-            Password=user.getPassword();
-            ActualAdress=user.getAddress();
-            name.setText(user.getName());
-            email.setText(user.getEmail());
-            mobile.setText(user.getMobile());
 
-            address.setText(user.getPrimaryOrderAddress());
-            zip.setText(user.getPrimaryOrderPincode());
+            if(user.getName().length()!= 0){
+                CustomerId=user.getId();
+                Password=user.getPassword();
+                ActualAdress=user.getAddress();
+                name.setText(user.getName());
+                email.setText(user.getEmail());
+                mobile.setText(user.getMobile());
+
+                address.setText(user.getPrimaryOrderAddress());
+                zip.setText(user.getPrimaryOrderPincode());
 
          /*   zip.setText(((CheckoutActivity) getActivity()).Pin);
             sa_houserno.setText(((CheckoutActivity) getActivity()).HouseDetails);
@@ -120,6 +122,16 @@ public class AddressFragment extends Fragment {
             sa_Area.setText(((CheckoutActivity) getActivity()).Area);
             sa_Residential.setText(((CheckoutActivity) getActivity()).ResidentialComplex);
             sa_Landmark.setText(((CheckoutActivity) getActivity()).Landmark);*/
+
+            }
+            else {
+                Intent intent = new Intent(getContext(), LoginRegisterActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.putExtra("PageType","PreCheckout");
+                startActivity(intent);
+                getActivity().finish();
+            }
+
         }
 
         else
@@ -207,8 +219,8 @@ public class AddressFragment extends Fragment {
                     zip.requestFocus();
                 }
                 else if (_landmark.length() ==0) {
-                    mobile.setError("Enter Landmark");
-                    mobile.requestFocus();
+                    sa_Landmark.setError("Enter Landmark");
+                    sa_Landmark.requestFocus();
                 }else {
                     //  userAddress = new UserAddress(_name, _email, _mobile, _address, _state, _city, _zip);
                     // String user_address = gson.toJson(userAddress);

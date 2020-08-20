@@ -60,49 +60,59 @@ public class RefferEarnActivity extends BaseActivity {
         Gson gson = new Gson();
         userString = localStorage.getUserLogin();
         user = gson.fromJson(userString, User.class);
-        if (user != null) {
+        if (user != null )
+        {
+             if(user.getName().length()!= 0)
+             {
+                 et_Referral.setText("");
+
+                 btn_Reffaral.setOnClickListener(new View.OnClickListener() {
+                     @Override
+                     public void onClick(View view) {
+                         String   _et_Referral ="";
+                         _et_Referral=  et_Referral.getText().toString();
+
+                         if
+                         (_et_Referral.length() == 0) {
+                             et_Referral.setError("Enter Refarral Code");
+                             et_Referral.requestFocus();
+                         }
+                         else
+                         {
+                             CouponMaster_ProcessReferralCode(_et_Referral);
+                         }
 
 
-            et_Referral.setText("");
+                     }
+                 });
 
-            btn_Reffaral.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    String   _et_Referral ="";
-                    _et_Referral=  et_Referral.getText().toString();
-
-                    if
-                    (_et_Referral.length() == 0) {
-                        et_Referral.setError("Enter Refarral Code");
-                        et_Referral.requestFocus();
-                    }
-                    else
-                    {
-                        CouponMaster_ProcessReferralCode(_et_Referral);
-                    }
+                 apv_share.setOnClickListener(new View.OnClickListener() {
+                     @Override
+                     public void onClick(View view) {
+                         if(userEntry==null){
+                             userEntry= "My Refarral Code is" + tv_MyCode.getText() + "Download  the app From:" +" www.google.com";
+                         }
 
 
-                }
-            });
+                         Intent textShareIntent = new Intent(Intent.ACTION_SEND);
+                         textShareIntent.putExtra(Intent.EXTRA_TEXT, userEntry);
+                         textShareIntent.setType("text/plain");
+                         startActivity(textShareIntent);
 
-            apv_share.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if(userEntry==null){
-                        userEntry= "My Refarral Code is" + tv_MyCode.getText() + "Download  the app From:" +" www.google.com";
-                    }
+                     }
+                 });
+
+                 Customer_GetReferralCode(user.getId());
+                 Customer_GetShareMessage(user.getId());
+             }
+             else {
+                 startActivity(new Intent(this, LoginRegisterActivity.class));
+                 this.finish();
+                 //overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
+             }
 
 
-                    Intent textShareIntent = new Intent(Intent.ACTION_SEND);
-                    textShareIntent.putExtra(Intent.EXTRA_TEXT, userEntry);
-                    textShareIntent.setType("text/plain");
-                    startActivity(textShareIntent);
 
-                }
-            });
-
-            Customer_GetReferralCode(user.getId());
-            Customer_GetShareMessage(user.getId());
         }
 
         else

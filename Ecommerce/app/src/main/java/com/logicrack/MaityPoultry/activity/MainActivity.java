@@ -34,6 +34,8 @@ import com.logicrack.MaityPoultry.helper.Converter;
 import com.logicrack.MaityPoultry.model.User;
 import com.logicrack.MaityPoultry.util.localstorage.LocalStorage;
 
+import org.apache.http.params.CoreConnectionPNames;
+
 import java.util.ArrayList;
 
 
@@ -45,6 +47,7 @@ public class MainActivity extends BaseActivity
     public  int AdapterItemClickId =0;
     public  String SearchProduct="";
     public  String activeFragment="Home";
+    public String Email,Pincode,Name,ContactNo,CusId,Password,Address,PrimaryOrderAddress,Lanmark;
 
     @SuppressLint("ResourceAsColor")
     static void centerToolbarTitle(@NonNull final Toolbar toolbar) {
@@ -168,6 +171,33 @@ public class MainActivity extends BaseActivity
         LinearLayout nav_footer = findViewById(R.id.footer_text);
         if (user != null) {
             nav_user.setText(user.getName());
+
+            Name=user.getName();
+            Email=user.getEmail();
+            Pincode=user.getPrimaryOrderPincode();
+
+            ContactNo=user.getMobile();
+            Address=user.getAddress();
+            PrimaryOrderAddress=user.getPrimaryOrderAddress();
+
+            Lanmark=user.getLandmark();
+            Password=user.getPassword();
+            CusId=user.getId();
+        }
+            else
+            {
+                Name="";
+                Email="";
+                Pincode="";
+                ContactNo="";
+                Address="";
+                PrimaryOrderAddress="";
+
+                Lanmark="";
+                Password="";
+                CusId="";
+
+
         }
         nav_footer.setOnClickListener(new View.OnClickListener() {
             @Override

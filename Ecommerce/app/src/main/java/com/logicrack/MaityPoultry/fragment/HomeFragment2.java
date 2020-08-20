@@ -1,10 +1,13 @@
 package com.logicrack.MaityPoultry.fragment;
 
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Vibrator;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -30,6 +34,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.gson.Gson;
 import com.logicrack.MaityPoultry.R;
 import com.logicrack.MaityPoultry.activity.MainActivity;
 import com.logicrack.MaityPoultry.adapter.CategoryAdapter;
@@ -41,7 +46,10 @@ import com.logicrack.MaityPoultry.adapter.PopularProductAdapter;
 import com.logicrack.MaityPoultry.helper.Data;
 import com.logicrack.MaityPoultry.model.CateGoryModel;
 import com.logicrack.MaityPoultry.model.Category;
+import com.logicrack.MaityPoultry.model.User;
+import com.logicrack.MaityPoultry.util.CustomToast;
 import com.logicrack.MaityPoultry.util.ExpandableHeightGridView;
+import com.logicrack.MaityPoultry.util.localstorage.LocalStorage;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -57,6 +65,7 @@ public class HomeFragment2 extends Fragment implements View.OnClickListener {
 
 
     ViewPager viewPager;
+    private static View view;
     LinearLayout sliderDotspanel;
     Timer timer;
     int page_position = 0;
@@ -75,9 +84,16 @@ public class HomeFragment2 extends Fragment implements View.OnClickListener {
     ProgressDialog progressDialog;
     private List<CateGoryModel> categories = new ArrayList<>();
     private ExpandableHeightGridView category_gridView;
-    EditText editProSearch;
-    TextView btn_searPro;
+    EditText editProSearch,txt_pincode;
+    TextView btn_searPro,btn_submit;
     SearchView productSearchView;
+
+
+
+    User user;
+    LocalStorage localStorage;
+
+    public String Email,Pincode,Name,ContactNo,CusId,Password,Address,PrimaryOrderAddress,Lanmark;
 
     String SearchProduct="";
     int category_id=0;
@@ -97,7 +113,7 @@ public class HomeFragment2 extends Fragment implements View.OnClickListener {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_home2, container, false);
+       view = inflater.inflate(R.layout.fragment_home2, container, false);
         data = new Data();
 
         ((MainActivity)getActivity()).activeFragment ="Home";
@@ -115,10 +131,33 @@ public class HomeFragment2 extends Fragment implements View.OnClickListener {
         lin_Stationary= view.findViewById(R.id.lin_Stationary);
 
         editProSearch = view.findViewById(R.id.editProSearch);
+        txt_pincode= view.findViewById(R.id.txt_pincode);
         btn_searPro= view.findViewById(R.id.btn_searPro);
+        btn_submit= view.findViewById(R.id.btn_submit);
         productSearchView=view.findViewById(R.id.productSearchView);
 
+        Pincode=((MainActivity) getActivity()).Pincode;
+        CusId=((MainActivity) getActivity()).CusId;
+        Name=((MainActivity) getActivity()).Name;
 
+        ContactNo=((MainActivity) getActivity()).ContactNo;
+        PrimaryOrderAddress=((MainActivity) getActivity()).PrimaryOrderAddress;
+        Address=((MainActivity) getActivity()).Address;
+
+        Lanmark=((MainActivity) getActivity()).Lanmark;
+        Password=((MainActivity) getActivity()).Password;
+        Email=((MainActivity) getActivity()).Email;
+
+
+
+
+         if (Pincode.length() == 0  || Pincode.equals("")) {
+            txt_pincode.setError("Enter Your Pincode ");
+            txt_pincode.requestFocus();
+        }
+        else {
+            txt_pincode.setText(Pincode);
+         }
 
         productSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -143,6 +182,7 @@ public class HomeFragment2 extends Fragment implements View.OnClickListener {
         lin_resturent.setOnClickListener(this);
         lin_Stationary.setOnClickListener(this);
         btn_searPro.setOnClickListener(this);
+        btn_submit.setOnClickListener(this);
 
 
 
@@ -447,10 +487,66 @@ public class HomeFragment2 extends Fragment implements View.OnClickListener {
                 }
                 break;
 
+            case R.id.btn_submit:
+                Pincode=txt_pincode.getText().toString();
+                if (Pincode.length() == 0  || Pincode.equals("")) {
+                    txt_pincode.setError("Enter Your Pincode ");
+                    txt_pincode.requestFocus();
+                }
+                else  if(Pincode.length() < 6|| Pincode.length() > 6){
+                    txt_pincode.setError("Enter Valid Pincode ");
+                    txt_pincode.requestFocus();
+                }
+                else {
+                    progressDialog.dismiss();
+
+                    ShowAleartDialog("Pincode Save Successfull");
+                    user = new User(CusId, Name, Email, ContactNo, Password, Address, "",Pincode,"");
+                    Gson gson = new Gson();
+                    String userString = gson.toJson(user);
+                    localStorage = new LocalStorage(getContext());
+                    localStorage.createUserLoginSession(userString);
+                }
+
+                break;
+
 
 
 
         }
 
+    }
+    private void ShowAleartDialog(String response)
+    {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle("Message");
+        builder.setMessage(response);
+        // add the buttons
+        // builder.setPositiveButton("Ok", null);
+        builder
+                .setPositiveButton(
+                        "Ok",
+                        new DialogInterface
+                                .OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface dialog,
+                                                int which)
+                            {
+
+                                // When the user click yes button
+                                // then app will close
+                                dialog.dismiss();
+                            }
+                        });
+        // create and show the alert dialog
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    public void vibrate(int duration) {
+        progressDialog.dismiss();
+        Vibrator vibs = (Vibrator) getActivity().getSystemService(Context.VIBRATOR_SERVICE);
+        vibs.vibrate(duration);
     }
 }

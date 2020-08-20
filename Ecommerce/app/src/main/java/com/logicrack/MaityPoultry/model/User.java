@@ -20,9 +20,11 @@ public class User {
         this.id = id;
         this.name = name;
         this.email = email;
+
         this.mobile = mobile;
         this.password = password;
         this.Address = Address;
+
         this.PrimaryOrderAddress = PrimaryOrderAddress;
         this.PrimaryOrderPincode = PrimaryOrderPincode;
         this.Landmark = Landmark;

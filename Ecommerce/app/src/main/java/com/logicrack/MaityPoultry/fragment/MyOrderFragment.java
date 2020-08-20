@@ -67,10 +67,14 @@ public class MyOrderFragment extends Fragment {
         user = gson.fromJson(userString, User.class);
 
         if (user != null) {
-
-
-            String CustomerId=user.getId();
-            App_usp_Order_GetAllByCustomerId(CustomerId);
+            if(user.getName().length()!= 0){
+                String CustomerId=user.getId();
+                App_usp_Order_GetAllByCustomerId(CustomerId);
+            }
+            else {
+                startActivity(new Intent(getActivity(), LoginRegisterActivity.class));
+                getActivity().finish();
+            }
         }
 
         else

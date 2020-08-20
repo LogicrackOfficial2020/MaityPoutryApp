@@ -50,9 +50,20 @@ TextView Email,FullName,Mobile;
         user = gson.fromJson(userString, User.class);
 
         if (user != null) {
-            Email.setText(user.getEmail());
-            FullName.setText(user.getName());
-            Mobile.setText(user.getMobile());
+            if(user.getName().length()!= 0 )
+            {
+                Email.setText(user.getEmail());
+                FullName.setText(user.getName());
+                Mobile.setText(user.getMobile());
+            }
+            else {
+                Intent intent = new Intent(getContext(), LoginRegisterActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.putExtra("PageType","PreCheckout");
+                startActivity(intent);
+                getActivity().finish();
+            }
+
         }
         else{
             Intent intent = new Intent(getContext(), LoginRegisterActivity.class);
