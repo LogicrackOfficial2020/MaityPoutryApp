@@ -219,7 +219,7 @@ public class SignUp_Fragment extends Fragment implements OnClickListener {
 
                             if( CustId!=0) {
 
-                                user = new User(obj.getString("CustomerId"), obj.getString("FName") + " " + obj.getString("LName"), obj.getString("Email"), obj.getString("MobNo"), obj.getString("Password"), getAddress, obj.getString("PrimaryOrderAddress"), obj.getString("PrimaryOrderPincode"),obj.getString("Landmark"));
+                                user = new User(obj.getString("CustomerId"), obj.getString("FName") + " " + obj.getString("LName"), obj.getString("Email"), obj.getString("MobNo"), obj.getString("Password"), getAddress, obj.getString("PrimaryOrderAddress"), obj.getString("PrimaryOrderPincode"),obj.getString("Landmark"),obj.getBoolean("ReferStatus"));
                                 Gson gson = new Gson();
                                 String userString = gson.toJson(user);
                                 localStorage = new LocalStorage(getContext());
@@ -276,6 +276,7 @@ public class SignUp_Fragment extends Fragment implements OnClickListener {
                 map.put("Pin", getpincode);
                 map.put("Password", getPassword);
                 map.put("Address", getAddress);
+                map.put("Landmark",getLandmark);
                 return map;
             }
         };

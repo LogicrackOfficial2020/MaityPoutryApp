@@ -45,6 +45,8 @@ public class RefferEarnActivity extends BaseActivity {
     LinearLayout apv_share;
     EditText et_Referral;
     TextView btn_Reffaral;
+    public String Email,Pincode,Name,ContactNo,CusId,Password,Address,PrimaryOrderAddress,Lanmark;
+    public Boolean ReferStatus;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,6 +66,18 @@ public class RefferEarnActivity extends BaseActivity {
         {
              if(user.getName().length()!= 0)
              {
+                 Name=user.getName();
+                 Email=user.getEmail();
+                 Pincode=user.getPrimaryOrderPincode();
+
+                 ContactNo=user.getMobile();
+                 Address=user.getAddress();
+                 PrimaryOrderAddress=user.getPrimaryOrderAddress();
+
+                 Lanmark=user.getLandmark();
+                 Password=user.getPassword();
+                 CusId=user.getId();
+                 ReferStatus=user.getReferStatus();
                  et_Referral.setText("");
 
                  btn_Reffaral.setOnClickListener(new View.OnClickListener() {
@@ -101,6 +115,11 @@ public class RefferEarnActivity extends BaseActivity {
 
                      }
                  });
+                 if(ReferStatus==true){
+                     btn_Reffaral.setVisibility(View.GONE);
+                     et_Referral.setText("Refer Code Already Used");
+                     et_Referral.setEnabled(false);
+                 }
 
                  Customer_GetReferralCode(user.getId());
                  Customer_GetShareMessage(user.getId());
@@ -134,14 +153,24 @@ public class RefferEarnActivity extends BaseActivity {
         progressDialog.setMessage("Please Wait....");
         progressDialog.show();
 
-        StringRequest vrequest = new StringRequest(Request.Method.GET, ProcessReferralCodeURL + Referral,
+        StringRequest vrequest = new StringRequest(Request.Method.GET, ProcessReferralCodeURL + Referral+"&CustomerId="+CusId,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
 
                         try {
                             JSONObject obj=new JSONObject(response);
-                         Msg = obj.getString("Msg");
+                             Msg = obj.getString("Msg");
+                             ReferStatus=true;
+                            et_Referral.setText(Msg);
+                            et_Referral.setEnabled(false);
+                            btn_Reffaral.setVisibility(View.GONE);
+                            user = new User(CusId, Name, Email, ContactNo, Password, Address, PrimaryOrderAddress,Pincode,Lanmark,ReferStatus);
+                            Gson gson = new Gson();
+                            String userString = gson.toJson(user);
+                            localStorage = new LocalStorage(getApplication());
+                            localStorage.createUserLoginSession(userString);
+
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }

@@ -168,12 +168,64 @@
                         android:layout_height="wrap_content"
                         android:layout_centerHorizontal="true"
                         android:layout_marginTop="10dp"
+
                         android:background="@drawable/shop_button_bg"
                         android:padding="10dp"
                         android:text="Shop Now"
                         android:textColor="@color/gen_white" />
+
                     <LinearLayout
                         android:id="@+id/quantity_ll"
+                        android:visibility="gone"
+                        android:orientation="horizontal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+                        <LinearLayout
+
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginTop="11dp"
+                            android:background="@drawable/shop_button_bg"
+                            android:orientation="vertical"
+                            >
+
+                            <TextView
+                                android:id="@+id/add"
+                                android:visibility="visible"
+                                style="@android:style/MediaButton"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerHorizontal="true"
+                                android:layout_marginTop="0dp"
+
+                                android:background="@drawable/shop_button_bg"
+                                android:padding="10dp"
+                                android:text="Added To Cart"
+                                android:textColor="@color/gen_white" />
+
+
+
+
+
+                        </LinearLayout>
+
+                        <TextView
+                            android:id="@+id/addtoCart1"
+                            style="@android:style/MediaButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true"
+                            android:visibility="gone"
+                            android:layout_marginTop="10dp"
+                            android:background="@drawable/shop_button_bg"
+                            android:padding="10dp"
+                            android:text="add to cart"
+                            android:textColor="@color/gen_white" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/quantity_l2"
                         android:visibility="gone"
                         android:orientation="horizontal"
                         android:layout_width="wrap_content"

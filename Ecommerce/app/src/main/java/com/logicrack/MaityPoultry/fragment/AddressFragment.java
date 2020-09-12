@@ -67,6 +67,7 @@ public class AddressFragment extends Fragment {
     String  Street,Area,Residential,Landmark,houserno;
     ProgressDialog progressDialog;
     String CustomerId;
+    Boolean ReferStatus;
     View v;
     private final String Update_Address_Pin_Url = "http://123api.123homepaints.com/api/KitchenRefill/App_UpdatePriAddress_Pin_ByCustId?CustomerId=";
     @Override
@@ -94,6 +95,7 @@ public class AddressFragment extends Fragment {
         progressDialog = new ProgressDialog(getContext());
 
 
+
         stateSpinner.setEnabled(false);
 
         localStorage = new LocalStorage(getContext());
@@ -112,9 +114,12 @@ public class AddressFragment extends Fragment {
                 name.setText(user.getName());
                 email.setText(user.getEmail());
                 mobile.setText(user.getMobile());
+                ReferStatus=user.getReferStatus();
 
                 address.setText(user.getPrimaryOrderAddress());
+                sa_Landmark.setText(user.getLandmark());
                 zip.setText(user.getPrimaryOrderPincode());
+
 
          /*   zip.setText(((CheckoutActivity) getActivity()).Pin);
             sa_houserno.setText(((CheckoutActivity) getActivity()).HouseDetails);
@@ -261,7 +266,7 @@ public class AddressFragment extends Fragment {
                         String Msg=response;
                         if(Msg !="0")
                         {
-                            user = new User(CustomerId, _name, _email, _mobile,Password,ActualAdress, _address, _zip,_landmark);
+                            user = new User(CustomerId, _name, _email, _mobile,Password,ActualAdress, _address, _zip,_landmark,ReferStatus);
                             Gson gson = new Gson();
                             String userString = gson.toJson(user);
                             localStorage = new LocalStorage(getContext());

@@ -167,7 +167,7 @@ public class OTP_LoginfActivity extends AppCompatActivity   {
                             }
                             else
                             {
-                                user = new User(obj.getString("CustomerId"), obj.getString("FName") +" "+  obj.getString("LName"), obj.getString("Email"), obj.getString("MobNo"),obj.getString("Password"),obj.getString("Address"), obj.getString("PrimaryOrderAddress"), obj.getString("PrimaryOrderPincode"),obj.getString("Landmark"));
+                                user = new User(obj.getString("CustomerId"), obj.getString("FName") +" "+  obj.getString("LName"), obj.getString("Email"), obj.getString("MobNo"),obj.getString("Password"),obj.getString("Address"), obj.getString("PrimaryOrderAddress"), obj.getString("PrimaryOrderPincode"),obj.getString("Landmark"),obj.getBoolean("ReferStatus"));
                                 Gson gson = new Gson();
                                 String userString = gson.toJson(user);
                                 localStorage = new LocalStorage(getApplicationContext());

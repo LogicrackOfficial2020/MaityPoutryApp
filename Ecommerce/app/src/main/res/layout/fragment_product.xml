@@ -37,7 +37,21 @@
                     android:hint="Search Product"
 
                     android:textSize="15sp" />
+                <EditText
+                    android:id="@+id/editProSearch1"
+                    android:layout_weight="0.5"
+                    android:background="@drawable/rounded_edittext"
+                    android:layout_marginLeft="5dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:padding="10dip"
+                    android:textColor="@android:color/background_dark"
+                    android:textColorHint="@android:color/darker_gray"
+                    android:textStyle="bold"
+                    android:hint="Search Product"
 
+                    android:textSize="15sp" />
 
 
 
@@ -81,6 +95,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="vertical"
         >
         <SearchView
             android:background="@drawable/rounded_edittext"
@@ -93,6 +108,30 @@
             android:queryHint="Search Here"
             android:queryBackground="@android:color/transparent"
             />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/et_Referral"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:background="@android:color/transparent"
+                android:drawablePadding="5dp"
+                android:gravity="center_vertical"
+                android:text="**Note: You can adjust the quantity of products from 'MyCart' page "
+                android:enabled="false"
+                android:inputType="textEmailAddress"
+                android:padding="5dp"
+                android:textStyle="bold"
+                android:maxLines="2"
+                android:textColor="@color/smoke_red"
+                android:textColorHint="@color/red"
+                android:textSize="6sp" />
+        </com.google.android.material.textfield.TextInputLayout>
+
     </LinearLayout>
 
 

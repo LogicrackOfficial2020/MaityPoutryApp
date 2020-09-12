@@ -95,6 +95,7 @@ public class PreCheckoutActivity extends BaseActivity implements CouponPopUpAdap
         gson = new Gson();
       String  userString = localStorage.getUserLogin();
         User user = gson.fromJson(userString, User.class);
+        Pin=user.getPrimaryOrderPincode();
 
 
        // userData(user.getEmail(),user.getPassword());
@@ -178,8 +179,8 @@ public class PreCheckoutActivity extends BaseActivity implements CouponPopUpAdap
                             Area= (obj.getString("Area"));
                             ResidentialComplex= (obj.getString("ResidentialComplex"));
                             Landmark= (obj.getString("Landmark"));
-                            City= (obj.getString("Landmark"));
-                            Pin= (obj.getString("Pin"));
+                            City= (obj.getString("City"));
+                        //    Pin= (obj.getString("Pin"));
 
 
 

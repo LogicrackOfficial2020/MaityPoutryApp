@@ -48,6 +48,7 @@ public class MainActivity extends BaseActivity
     public  String SearchProduct="";
     public  String activeFragment="Home";
     public String Email,Pincode,Name,ContactNo,CusId,Password,Address,PrimaryOrderAddress,Lanmark;
+    public Boolean ReferStatus;
 
     @SuppressLint("ResourceAsColor")
     static void centerToolbarTitle(@NonNull final Toolbar toolbar) {
@@ -183,6 +184,7 @@ public class MainActivity extends BaseActivity
             Lanmark=user.getLandmark();
             Password=user.getPassword();
             CusId=user.getId();
+            ReferStatus=user.getReferStatus();
         }
             else
             {
@@ -298,12 +300,13 @@ public class MainActivity extends BaseActivity
     }
 
 
-    public void onAdapterCalled(int id, String tag,String SearchProductName) {
+    public void onAdapterCalled(int id, String tag,String SearchProductName,String pin) {
 
         //creating fragment object
        // Fragment fragment = null;
         AdapterItemClickId = id;
         SearchProduct=SearchProductName;
+        Pincode=pin;
 
         //initializing the fragment object which is selected
         switch (tag) {

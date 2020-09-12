@@ -11,12 +11,13 @@ public class User {
     String PrimaryOrderAddress;
     String PrimaryOrderPincode;
     String Landmark;
+    Boolean ReferStatus;
 
 
     public User() {
     }
 
-    public User(String id, String name, String email, String mobile, String password,String Address,String PrimaryOrderAddress,String PrimaryOrderPincode,String Landmark) {
+    public User(String id, String name, String email, String mobile, String password,String Address,String PrimaryOrderAddress,String PrimaryOrderPincode,String Landmark,Boolean ReferStatus) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -28,6 +29,7 @@ public class User {
         this.PrimaryOrderAddress = PrimaryOrderAddress;
         this.PrimaryOrderPincode = PrimaryOrderPincode;
         this.Landmark = Landmark;
+        this.ReferStatus=ReferStatus;
     }
 
     /*  public User(int UserId, String Name, String UserPassword,String email, String mobile, String Name) {
@@ -49,6 +51,15 @@ public class User {
     public void setLandmark(String Landmark) {
         this.Landmark = Landmark;
     }
+
+    public Boolean getReferStatus() {
+        return ReferStatus;
+    }
+    public void setReferStatus(Boolean ReferStatus) {
+        this.ReferStatus = ReferStatus;
+    }
+
+
     public String getPrimaryOrderPincode() {
         return PrimaryOrderPincode;
     }

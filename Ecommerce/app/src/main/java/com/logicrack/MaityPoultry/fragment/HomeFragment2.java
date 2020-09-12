@@ -94,6 +94,7 @@ public class HomeFragment2 extends Fragment implements View.OnClickListener {
     LocalStorage localStorage;
 
     public String Email,Pincode,Name,ContactNo,CusId,Password,Address,PrimaryOrderAddress,Lanmark;
+    public Boolean ReferStatus;
 
     String SearchProduct="";
     int category_id=0;
@@ -147,6 +148,7 @@ public class HomeFragment2 extends Fragment implements View.OnClickListener {
         Lanmark=((MainActivity) getActivity()).Lanmark;
         Password=((MainActivity) getActivity()).Password;
         Email=((MainActivity) getActivity()).Email;
+        ReferStatus=((MainActivity) getActivity()).ReferStatus;
 
 
 
@@ -163,8 +165,20 @@ public class HomeFragment2 extends Fragment implements View.OnClickListener {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 SearchProduct=query;
+                Pincode=txt_pincode.getText().toString();
+                if (Pincode.length() == 0  || Pincode.equals("")) {
+                    txt_pincode.setError("Enter Your Pincode ");
+                    txt_pincode.requestFocus();
+                }
+                else  if(Pincode.length() < 6|| Pincode.length() > 6){
+                    txt_pincode.setError("Enter Valid Pincode ");
+                    txt_pincode.requestFocus();
+                }
+                else {
+                    ((MainActivity)getActivity()).onAdapterCalled(category_id,"subcategory",SearchProduct,Pincode);
+                }
 
-                ((MainActivity)getActivity()).onAdapterCalled(category_id,"subcategory",SearchProduct);
+
                 return false;
             }
 
@@ -375,12 +389,25 @@ public class HomeFragment2 extends Fragment implements View.OnClickListener {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                CateGoryModel category = categories.get(position);
+                Pincode=txt_pincode.getText().toString();
+                if (Pincode.length() == 0  || Pincode.equals("")) {
+                    txt_pincode.setError("Enter Your Pincode ");
+                    txt_pincode.requestFocus();
+                }
+                else  if(Pincode.length() < 6|| Pincode.length() > 6){
+                    txt_pincode.setError("Enter Valid Pincode ");
+                    txt_pincode.requestFocus();
+                }
+                else {
+                    CateGoryModel category = categories.get(position);
 
-                category_id = category.getCategoryId();
+                    category_id = category.getCategoryId();
 
 
-                ((MainActivity)getActivity()).onAdapterCalled(category_id,"subcategory",SearchProduct);
+                    ((MainActivity)getActivity()).onAdapterCalled(category_id,"subcategory",SearchProduct,Pincode);
+                }
+
+
             }
         });
 
@@ -475,15 +502,23 @@ public class HomeFragment2 extends Fragment implements View.OnClickListener {
 
             case R.id.btn_searPro:
                 SearchProduct=editProSearch.getText().toString();
-
+                Pincode=txt_pincode.getText().toString();
                 if
                 (SearchProduct.length() == 0) {
                     editProSearch.setError("Enter Product Name");
                     editProSearch.requestFocus();
                 }
+               else if (Pincode.length() == 0  || Pincode.equals("")) {
+                    txt_pincode.setError("Enter Your Pincode ");
+                    txt_pincode.requestFocus();
+                }
+                else  if(Pincode.length() < 6|| Pincode.length() > 6){
+                    txt_pincode.setError("Enter Valid Pincode ");
+                    txt_pincode.requestFocus();
+                }
                 else
                 {
-                    ((MainActivity)getActivity()).onAdapterCalled(category_id,"subcategory",SearchProduct);
+                    ((MainActivity)getActivity()).onAdapterCalled(category_id,"subcategory",SearchProduct,Pincode);
                 }
                 break;
 
@@ -500,8 +535,8 @@ public class HomeFragment2 extends Fragment implements View.OnClickListener {
                 else {
                     progressDialog.dismiss();
 
-                    ShowAleartDialog("Pincode Save Successfull");
-                    user = new User(CusId, Name, Email, ContactNo, Password, Address, "",Pincode,"");
+                    ShowAleartDialog("Pincode Save Successful");
+                    user = new User(CusId, Name, Email, ContactNo, Password, Address, "",Pincode,"",ReferStatus);
                     Gson gson = new Gson();
                     String userString = gson.toJson(user);
                     localStorage = new LocalStorage(getContext());

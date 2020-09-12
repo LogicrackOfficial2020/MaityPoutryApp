@@ -50,7 +50,7 @@ public class ProductFragment extends Fragment implements View.OnClickListener {
     GridView product_gridView;
     int id=0;
     String ProName="";
-
+String Pincode;
     EditText editProSearch;
     TextView btn_searPro;
     SearchView productSearchView;
@@ -81,6 +81,7 @@ public class ProductFragment extends Fragment implements View.OnClickListener {
         ((MainActivity)getActivity()).activeFragment ="Product";
         id = ((MainActivity) getActivity()).AdapterItemClickId;
         ProName=((MainActivity) getActivity()).SearchProduct;
+        Pincode=((MainActivity) getActivity()).Pincode;
 
 
 
@@ -122,7 +123,7 @@ public class ProductFragment extends Fragment implements View.OnClickListener {
         progressDialog.setMessage("Please Wait....");
         progressDialog.show();
 
-        StringRequest vrequest = new StringRequest(Request.Method.GET, URL + String.valueOf(id)+"&SearchPhrase="+ProName,
+        StringRequest vrequest = new StringRequest(Request.Method.GET, URL + String.valueOf(id)+"&SearchPhrase="+ProName+"&Pincode="+Pincode,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {

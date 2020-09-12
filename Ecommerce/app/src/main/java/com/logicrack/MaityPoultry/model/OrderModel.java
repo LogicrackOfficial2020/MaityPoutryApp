@@ -27,6 +27,8 @@ public class OrderModel {
 
     public  int  TransactionStatus  ;
     public  String  TransactionIdentifier  ;
+    public  String  Pincode;
+
 
     public List<Cart> OrderList ;
 
@@ -36,7 +38,7 @@ public class OrderModel {
         this.TransactionIdentifier = TransactionIdentifier;
     }
 
-    public  OrderModel(String OrderAmount,int CustomerId_FK,String OrderShippingFname,String OrderShippingAddress,String OrderShippingContactNo,String OrderShippingEmailId,List<Cart> OrderList,String ConsumerIdentifier,String  ConsumerEmailID,String  ConsumerMobileNumber,String CouponCode)
+    public  OrderModel(String OrderAmount,int CustomerId_FK,String OrderShippingFname,String OrderShippingAddress,String OrderShippingContactNo,String OrderShippingEmailId,List<Cart> OrderList,String ConsumerIdentifier,String  ConsumerEmailID,String  ConsumerMobileNumber,String CouponCode,String Pincode)
     {
         this.OrderAmount = OrderAmount;
         this.CustomerId_FK = CustomerId_FK;
@@ -49,6 +51,7 @@ public class OrderModel {
         this.ConsumerEmailID = ConsumerEmailID;
         this.ConsumerMobileNumber = ConsumerMobileNumber;
         this.CouponCode = CouponCode;
+        this.Pincode=Pincode;
     }
 
     public String getOrderAmount() {
@@ -98,6 +101,14 @@ public class OrderModel {
     public void setOrderShippingContactNo(String OrderShippingContactNo) {
         this.OrderShippingContactNo = OrderShippingContactNo;
     }
+
+    public String getPincode() {
+        return Pincode;
+    }
+    public void setPincode(String Pincode) {
+        this.Pincode = Pincode;
+    }
+
 
     public String getOrderShippingEmailId() {
         return OrderShippingEmailId;

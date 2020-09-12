@@ -611,7 +611,7 @@ public void showDialog(List<CouponModel> couponModelList) {
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE); //before
         // Include dialog.xml file
         dialog.setContentView(R.layout.success_dialog);
-TextView btn_home = dialog.findViewById(R.id.btn_home);
+        TextView btn_home = dialog.findViewById(R.id.btn_home);
         dialog.setCanceledOnTouchOutside(false);
         dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
             @Override
@@ -677,12 +677,13 @@ TextView btn_home = dialog.findViewById(R.id.btn_home);
         String OrderShippingAddress =((PreCheckoutActivity)getActivity()).OrderShippingAddress;
         String OrderShippingContactNo =((PreCheckoutActivity)getActivity()).OrderShippingContactNo;
         String OrderShippingEmailId=((PreCheckoutActivity)getActivity()).OrderShippingEmailId;
+        String OrderPinCode =((PreCheckoutActivity) getActivity()).Pin;
         String Total=String.format("%.2f",_totalAmount);
         final  String total = Total;
 
         List<Cart> OrderList =cartitems;
 
-        OrderModel order = new OrderModel( total, CustomerId,OrderShippingFname,OrderShippingAddress,OrderShippingContactNo,OrderShippingEmailId, OrderList,ConsumerIdentifier,ConsumerEmailID,ConsumerMobileNumber,CouponCode);
+        OrderModel order = new OrderModel( total, CustomerId,OrderShippingFname,OrderShippingAddress,OrderShippingContactNo,OrderShippingEmailId, OrderList,ConsumerIdentifier,ConsumerEmailID,ConsumerMobileNumber,CouponCode,OrderPinCode);
 
 
         Gson gson = new Gson();
@@ -695,7 +696,7 @@ TextView btn_home = dialog.findViewById(R.id.btn_home);
             e.printStackTrace();
         }
 
-progressDialog.show();
+         progressDialog.show();
         JsonObjectRequest myJsonRequest = new JsonObjectRequest(Request.Method.POST,
                 OrderSave_URL, JsonObj , new Response.Listener<JSONObject>() {
 

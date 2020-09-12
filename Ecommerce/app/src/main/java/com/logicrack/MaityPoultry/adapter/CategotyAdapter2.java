@@ -28,6 +28,7 @@ public class CategotyAdapter2 extends RecyclerView.Adapter<CategotyAdapter2.Plac
     Context context;
     String Tag;
     String SearchProduct=null;
+    String Pincode;
     public CategotyAdapter2(Context mContext, int[] mPlaceList) {
         this.mContext = mContext;
         this.mPlaceList = mPlaceList;
@@ -93,7 +94,7 @@ public class CategotyAdapter2 extends RecyclerView.Adapter<CategotyAdapter2.Plac
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((MainActivity) v.getContext()).onAdapterCalled(id,"subcategory",SearchProduct);
+                ((MainActivity) v.getContext()).onAdapterCalled(id,"subcategory",SearchProduct,Pincode);
             }
         });
 
