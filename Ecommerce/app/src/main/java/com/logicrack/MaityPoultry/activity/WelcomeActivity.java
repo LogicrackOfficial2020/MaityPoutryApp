@@ -56,7 +56,7 @@ public class WelcomeActivity extends AppCompatActivity {
 
         dotscount = viewPagerAdapter.getCount();
         dots = new ImageView[dotscount];
-
+        //int b=0;
         for (int i = 0; i < dotscount; i++) {
 
             dots[i] = new ImageView(this);
