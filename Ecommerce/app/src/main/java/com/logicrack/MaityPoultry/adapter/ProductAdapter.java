@@ -42,16 +42,18 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
     Gson gson;
     List<Cart> cartList = new ArrayList<>();
     String _quantity, _price, _attribute, _subtotal;
+    String PinCode;
 
     public ProductAdapter(List<Product> productList, Context context) {
         this.productList = productList;
         this.context = context;
     }
 
-    public ProductAdapter(List<Product> productList, Context context, String tag) {
+    public ProductAdapter(List<Product> productList, Context context, String tag,String Pincode) {
         this.productList = productList;
         this.context = context;
         Tag = tag;
+        this.PinCode=Pincode;
     }
 
     @NonNull
@@ -204,7 +206,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
                     _subtotal = String.valueOf(Double.parseDouble(_price) * Integer.parseInt(_quantity));
                     holder.subTotal.setText(_quantity + "X" + _price + "= Rs." + _subtotal);
                     if (context instanceof ProductActivity) {
-                        Cart cart = new Cart(product.getId(), product.getTitle(), product.getImage(), product.getCurrency(), _price, _attribute, _quantity, _subtotal);
+                        Cart cart = new Cart(product.getId(), product.getTitle(), product.getImage(), product.getCurrency(), _price, _attribute, _quantity, _subtotal,PinCode);
                         cartList = ((BaseActivity) context).getCartList();
                         cartList.add(cart);
                         String cartStr = gson.toJson(cartList);

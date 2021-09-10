@@ -45,6 +45,8 @@ public class CheckoutActivity extends CheckOutBaseActivity {
     String TransactionIdentifier,TransactionReference,TransactionAmount,TransactionDateTime,ConsumerIdentifier,ConsumerEmailID,ConsumerMobileNumber;
     ProgressDialog progressDialog;
     private static final String TAG = "CheckoutActivity";
+    private  int CompanyId;
+    private  String SchemeCode;
     private final String TransactionStatus_Update_Url = "http://123api.123homepaints.com/api/KitchenRefill/App_TransactionStatus_Update";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +60,7 @@ public class CheckoutActivity extends CheckOutBaseActivity {
         ConsumerIdentifier = getIntent().getStringExtra("ConsumerIdentifier");
         ConsumerEmailID = getIntent().getStringExtra("ConsumerEmailID");
         ConsumerMobileNumber = getIntent().getStringExtra("ConsumerMobileNumber");
+        SchemeCode = getIntent().getStringExtra("ShemeCode");
 
         creatingCheckOutObjects();
     }
@@ -145,9 +148,14 @@ public class CheckoutActivity extends CheckOutBaseActivity {
 
                 } catch (JSONException e) {
                     e.printStackTrace();
+
+
                 }
 
+finally {
+                    progressDialog.dismiss();
 
+                }
                 // closeProgress();
             }
         }, new Response.ErrorListener() {
@@ -174,12 +182,15 @@ public class CheckoutActivity extends CheckOutBaseActivity {
 
 // setting values to checkout object
 
-        checkout.setMerchantIdentifier("L508151");  //T508151where T1234 is the merchant Code and will be provided by TPSL L508151
+       // checkout.setMerchantIdentifier("L508151");  //T508151where T1234 is the merchant Code and will be provided by TPSL L508151 ----Kitchen Refil
+
+        //checkout.setMerchantIdentifier("T592552");  //T508151where T1234 is the merchant Code and will be provided by TPSL T592552---Maity Poultry
+        checkout.setMerchantIdentifier("L592552");
 
        checkout.setTransactionIdentifier(TransactionIdentifier); //where TXN001 is the Merchant transaction identifier (alphanumeric no special character allowed)
-       // checkout.setTransactionIdentifier("TXN028");
-        checkout.setTransactionReference(TransactionReference); //where ORD0001 is the Merchant transaction reference number
-      //  checkout.setTransactionReference("ORD0028");
+      // checkout.setTransactionIdentifier("TXN028");
+       checkout.setTransactionReference(TransactionReference); //where ORD0001 is the Merchant transaction reference number
+        //checkout.setTransactionReference("ORD0028");
 
         checkout.setTransactionType(PaymentActivity.TRANSACTION_TYPE_SALE); //Transaction type
 
@@ -187,7 +198,8 @@ public class CheckoutActivity extends CheckOutBaseActivity {
 
         checkout.setTransactionCurrency("INR"); //CURRENCY
 
-        checkout.setTransactionAmount(TransactionAmount); //Transaction amount
+       // checkout.setTransactionAmount(TransactionAmount); //Transaction amount
+       checkout.setTransactionAmount("1.00"); //Transaction amount
 
         checkout.setTransactionDateTime(TransactionDateTime); //Transaction date
       // checkout.setTransactionDateTime("26-05-2020");
@@ -195,14 +207,14 @@ public class CheckoutActivity extends CheckOutBaseActivity {
 
 // setting Consumer fields values
 
-      //  checkout.setConsumerIdentifier(ConsumerIdentifier); //Consumer Identifier, set this value as application user name
+       // checkout.setConsumerIdentifier(ConsumerIdentifier); //Consumer Identifier, set this value as application user name
 
-        checkout.setConsumerIdentifier("Sun");
+        checkout.setConsumerIdentifier("");
 
-        checkout.setConsumerEmailID(ConsumerEmailID); //Consumer email id
-       // checkout.setConsumerEmailID("subha221b@gmail.com");
+       checkout.setConsumerEmailID(ConsumerEmailID); //Consumer email id
+      // checkout.setConsumerEmailID("subha221b@gmail.com");
         checkout.setConsumerMobileNumber(ConsumerMobileNumber); //Consumer mobile number
-        // checkout.setConsumerMobileNumber("8967547439");
+      //  checkout.setConsumerMobileNumber("8967547439");
 
         checkout.setConsumerAccountNo(""); //Default value "", leave it blank
 
@@ -210,9 +222,15 @@ public class CheckoutActivity extends CheckOutBaseActivity {
 
 // setting Consumer Cart Item
 
-        checkout.addCartItem("FIRST", "1.00", "0.0", "0.0",
+    checkout.addCartItem(SchemeCode, "1.00", "0.0", "0.0",
 
-                "", "", "", "");
+            "", "", "", "");
+
+
+
+        /*checkout.addCartItem(ShemeCode, TransactionAmount, "0.0", "0.0",
+
+                "", "", "", "");*/
         callingPaymentActivity(checkout);
 
     }
@@ -261,172 +279,193 @@ public class CheckoutActivity extends CheckOutBaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         // Check which request we're responding to
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == PaymentActivity.REQUEST_CODE) {
-            // Make sure the request was successful
-            if (resultCode == PaymentActivity.RESULT_OK) {
-                Log.d(TAG, "Result Code :" + RESULT_OK);
-                if (data != null) {
 
-                    try {
-                        Checkout checkout_res = (Checkout) data
-                                .getSerializableExtra(Constant.ARGUMENT_DATA_CHECKOUT);
-                        Log.d("Checkout Response Obj", checkout_res
-                                .getMerchantResponsePayload().toString());
+        try
+        {
+            super.onActivityResult(requestCode, resultCode, data);
+            if (requestCode == PaymentActivity.REQUEST_CODE) {
+                // Make sure the request was successful
+                if (resultCode == PaymentActivity.RESULT_OK) {
+                    Log.d(TAG, "Result Code :" + RESULT_OK);
+                    if (data != null) {
 
-                        String transactionType = checkout_res.
-                                getMerchantRequestPayload().getTransaction().getType();
-                        String transactionSubType = checkout_res.
-                                getMerchantRequestPayload().getTransaction().getSubType();
-                        if (transactionType != null && transactionType.equalsIgnoreCase(PaymentActivity.TRANSACTION_TYPE_PREAUTH)
-                                && transactionSubType != null && transactionSubType
-                                .equalsIgnoreCase(PaymentActivity.TRANSACTION_SUBTYPE_RESERVE)) {
-                            // Transaction Completed and Got SUCCESS
-                            if (checkout_res.getMerchantResponsePayload()
-                                    .getPaymentMethod().getPaymentTransaction()
-                                    .getStatusCode().equalsIgnoreCase(PaymentActivity.TRANSACTION_STATUS_PREAUTH_RESERVE_SUCCESS)) {
-                                Toast.makeText(getApplicationContext(), "Transaction Status - Success", Toast.LENGTH_SHORT).show();
-                                Log.v("TRANSACTION STATUS=>", "SUCCESS");
+                        try {
+                            Checkout checkout_res = (Checkout) data
+                                    .getSerializableExtra(Constant.ARGUMENT_DATA_CHECKOUT);
+                            Log.d("Checkout Response Obj", checkout_res
+                                    .getMerchantResponsePayload().toString());
 
-                                /**
-                                 * TRANSACTION STATUS - SUCCESS (status code
-                                 * 0200 means success), NOW MERCHANT CAN PERFORM
-                                 * ANY OPERATION OVER SUCCESS RESULT
-                                 */
-
-                                if (checkout_res.getMerchantResponsePayload().getPaymentMethod().getPaymentTransaction().getInstruction().
-                                        getStatusCode().equalsIgnoreCase("")) {
-                                    /**
-                                     * SI TRANSACTION STATUS - SUCCESS (status
-                                     * code 0200 means success)
-                                     */
-                                    Log.v("TRANSACTION SI STATUS=>",
-                                            "SI Transaction Not Initiated");
-                                }
-
-                            } // Transaction Completed and Got FAILURE
-
-                            else {
-                                // some error from bank side
-                                Log.v("TRANSACTION STATUS=>", "FAILURE");
-                                Toast.makeText(getApplicationContext(),
-                                        "Transaction Status - Failure",
-                                        Toast.LENGTH_SHORT).show();
-                            }
-
-                        }
-                        else {
-
-                            // Transaction Completed and Got SUCCESS
-                            if (checkout_res.getMerchantResponsePayload().getPaymentMethod().getPaymentTransaction().getStatusCode().equalsIgnoreCase(
-                                    PaymentActivity.TRANSACTION_STATUS_SALES_DEBIT_SUCCESS)) {
-                                Toast.makeText(getApplicationContext(), "Transaction Status - Success", Toast.LENGTH_SHORT).show();
-                                Log.v("TRANSACTION STATUS=>", "SUCCESS");
-
-                                /**
-                                 * TRANSACTION STATUS - SUCCESS (status code
-                                 * 0300 means success), NOW MERCHANT CAN PERFORM
-                                 * ANY OPERATION OVER SUCCESS RESULT
-                                 */
-
-                                if (checkout_res.getMerchantResponsePayload().
-                                        getPaymentMethod().getPaymentTransaction().
-                                        getInstruction().getStatusCode()
-                                        .equalsIgnoreCase("")) {
-                                    /**
-                                     * SI TRANSACTION STATUS - SUCCESS (status
-                                     * code 0300 means success)
-                                     */
-                                    Log.v("TRANSACTION SI STATUS=>",
-                                            "SI Transaction Not Initiated");
-                                }
-                                else if (checkout_res.getMerchantResponsePayload()
+                            String transactionType = checkout_res.
+                                    getMerchantRequestPayload().getTransaction().getType();
+                            String transactionSubType = checkout_res.
+                                    getMerchantRequestPayload().getTransaction().getSubType();
+                            if (transactionType != null && transactionType.equalsIgnoreCase(PaymentActivity.TRANSACTION_TYPE_PREAUTH)
+                                    && transactionSubType != null && transactionSubType
+                                    .equalsIgnoreCase(PaymentActivity.TRANSACTION_SUBTYPE_RESERVE)) {
+                                // Transaction Completed and Got SUCCESS
+                                if (checkout_res.getMerchantResponsePayload()
                                         .getPaymentMethod().getPaymentTransaction()
-                                        .getInstruction()
-                                        .getStatusCode().equalsIgnoreCase(
-                                                PaymentActivity.TRANSACTION_STATUS_SALES_DEBIT_SUCCESS)) {
+                                        .getStatusCode().equalsIgnoreCase(PaymentActivity.TRANSACTION_STATUS_PREAUTH_RESERVE_SUCCESS)) {
+                                    Toast.makeText(getApplicationContext(), "Transaction Status - Success", Toast.LENGTH_SHORT).show();
+                                    Log.v("TRANSACTION STATUS=>", "SUCCESS");
 
                                     /**
-                                     * SI TRANSACTION STATUS - SUCCESS (status
-                                     * code 0300 means success)
+                                     * TRANSACTION STATUS - SUCCESS (status code
+                                     * 0200 means success), NOW MERCHANT CAN PERFORM
+                                     * ANY OPERATION OVER SUCCESS RESULT
                                      */
-                                    Log.v("TRANSACTION SI STATUS=>", "SUCCESS");
-                                } else {
-                                    /**
-                                     * SI TRANSACTION STATUS - Failure (status
-                                     * code OTHER THAN 0300 means failure)
-                                     */
-                                    Log.v("TRANSACTION SI STATUS=>", "FAILURE");
+
+                                    if (checkout_res.getMerchantResponsePayload().getPaymentMethod().getPaymentTransaction().getInstruction().
+                                            getStatusCode().equalsIgnoreCase("")) {
+                                        /**
+                                         * SI TRANSACTION STATUS - SUCCESS (status
+                                         * code 0200 means success)
+                                         */
+                                        Log.v("TRANSACTION SI STATUS=>",
+                                                "SI Transaction Not Initiated");
+                                    }
+
+                                } // Transaction Completed and Got FAILURE
+
+                                else {
+                                    // some error from bank side
+                                    Log.v("TRANSACTION STATUS=>", "FAILURE");
+                                    Toast.makeText(getApplicationContext(),
+                                            "Transaction Status - Failure",
+                                            Toast.LENGTH_SHORT).show();
                                 }
 
-                            } // Transaction Completed and Got FAILURE
-                            else {
-                                // some error from bank side
-                                Log.v("TRANSACTION STATUS=>", "FAILURE");
-                                Toast.makeText(getApplicationContext(),
-                                        "Transaction Status - Failure",
-                                        Toast.LENGTH_SHORT).show();
                             }
+                            else {
 
+                                // Transaction Completed and Got SUCCESS
+                                if (checkout_res.getMerchantResponsePayload().getPaymentMethod().getPaymentTransaction().getStatusCode().equalsIgnoreCase(
+                                        PaymentActivity.TRANSACTION_STATUS_SALES_DEBIT_SUCCESS)) {
+                                    Toast.makeText(getApplicationContext(), "Transaction Status - Success", Toast.LENGTH_SHORT).show();
+                                    Log.v("TRANSACTION STATUS=>", "SUCCESS");
+
+                                    /**
+                                     * TRANSACTION STATUS - SUCCESS (status code
+                                     * 0300 means success), NOW MERCHANT CAN PERFORM
+                                     * ANY OPERATION OVER SUCCESS RESULT
+                                     */
+
+                                    if (checkout_res.getMerchantResponsePayload().
+                                            getPaymentMethod().getPaymentTransaction().
+                                            getInstruction().getStatusCode()
+                                            .equalsIgnoreCase("")) {
+                                        /**
+                                         * SI TRANSACTION STATUS - SUCCESS (status
+                                         * code 0300 means success)
+                                         */
+                                        Log.v("TRANSACTION SI STATUS=>",
+                                                "SI Transaction Not Initiated");
+                                    }
+                                    else if (checkout_res.getMerchantResponsePayload()
+                                            .getPaymentMethod().getPaymentTransaction()
+                                            .getInstruction()
+                                            .getStatusCode().equalsIgnoreCase(
+                                                    PaymentActivity.TRANSACTION_STATUS_SALES_DEBIT_SUCCESS)) {
+
+                                        /**
+                                         * SI TRANSACTION STATUS - SUCCESS (status
+                                         * code 0300 means success)
+                                         */
+                                        Log.v("TRANSACTION SI STATUS=>", "SUCCESS");
+                                    } else {
+                                        /**
+                                         * SI TRANSACTION STATUS - Failure (status
+                                         * code OTHER THAN 0300 means failure)
+                                         */
+                                        Log.v("TRANSACTION SI STATUS=>", "FAILURE");
+                                    }
+
+                                } // Transaction Completed and Got FAILURE
+                                else {
+                                    // some error from bank side
+                                    Log.v("TRANSACTION STATUS=>", "FAILURE");
+                                    Toast.makeText(getApplicationContext(),
+                                            "Transaction Status - Failure",
+                                            Toast.LENGTH_SHORT).show();
+                                }
+
+                            }
+                            String result = "StatusCode : " + checkout_res
+                                    .getMerchantResponsePayload().getPaymentMethod()
+                                    .getPaymentTransaction().getStatusCode()
+                                    + "\nStatusMessage : " + checkout_res
+                                    .getMerchantResponsePayload().getPaymentMethod()
+                                    .getPaymentTransaction().getStatusMessage()
+                                    + "\nErrorMessage : " + checkout_res
+                                    .getMerchantResponsePayload().getPaymentMethod()
+                                    .getPaymentTransaction().getErrorMessage()
+                                    + "\nAmount : " + checkout_res
+                                    .getMerchantResponsePayload().getPaymentMethod().getPaymentTransaction().getAmount()
+                                    + "\nDateTime : " + checkout_res.
+                                    getMerchantResponsePayload().getPaymentMethod()
+                                    .getPaymentTransaction().getDateTime()
+                                    + "\nMerchantTransactionIdentifier : "
+                                    + checkout_res.getMerchantResponsePayload()
+                                    .getMerchantTransactionIdentifier()
+                                    + "\nIdentifier : " + checkout_res
+                                    .getMerchantResponsePayload().getPaymentMethod()
+                                    .getPaymentTransaction().getIdentifier();
+
+                            TransactionStatus_Update(2,checkout_res
+                                    .getMerchantResponsePayload().getPaymentMethod()
+                                    .getPaymentTransaction().getIdentifier());
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
                         }
-                        String result = "StatusCode : " + checkout_res
-                                .getMerchantResponsePayload().getPaymentMethod()
-                                .getPaymentTransaction().getStatusCode()
-                                + "\nStatusMessage : " + checkout_res
-                                .getMerchantResponsePayload().getPaymentMethod()
-                                .getPaymentTransaction().getStatusMessage()
-                                + "\nErrorMessage : " + checkout_res
-                                .getMerchantResponsePayload().getPaymentMethod()
-                                .getPaymentTransaction().getErrorMessage()
-                                + "\nAmount : " + checkout_res
-                                .getMerchantResponsePayload().getPaymentMethod().getPaymentTransaction().getAmount()
-                                + "\nDateTime : " + checkout_res.
-                                getMerchantResponsePayload().getPaymentMethod()
-                                .getPaymentTransaction().getDateTime()
-                                + "\nMerchantTransactionIdentifier : "
-                                + checkout_res.getMerchantResponsePayload()
-                                .getMerchantTransactionIdentifier()
-                                + "\nIdentifier : " + checkout_res
-                                .getMerchantResponsePayload().getPaymentMethod()
-                                .getPaymentTransaction().getIdentifier();
 
-                        TransactionStatus_Update(2,checkout_res
-                                .getMerchantResponsePayload().getPaymentMethod()
-                                .getPaymentTransaction().getIdentifier());
+                    }
+                } else if (resultCode == PaymentActivity.RESULT_ERROR) {
+                    Log.d(TAG, "got an error");
 
-                    } catch (Exception e) {
-                        e.printStackTrace();
+                    if (data.hasExtra(PaymentActivity.RETURN_ERROR_CODE) &&
+                            data.hasExtra(PaymentActivity.RETURN_ERROR_DESCRIPTION)) {
+                        String error_code = (String) data
+                                .getStringExtra(PaymentActivity.RETURN_ERROR_CODE);
+                        String error_desc = (String) data
+                                .getStringExtra(PaymentActivity.RETURN_ERROR_DESCRIPTION);
+
+                        Toast.makeText(getApplicationContext(), " Got error :"
+                                + error_code + "--- " + error_desc, Toast.LENGTH_SHORT)
+                                .show();
+                        Log.d(TAG + " Code=>", error_code);
+                        Log.d(TAG + " Desc=>", error_desc);
+
+                        TransactionStatus_Update(3,TransactionIdentifier);
+
                     }
 
-                }
-            } else if (resultCode == PaymentActivity.RESULT_ERROR) {
-                Log.d(TAG, "got an error");
-
-                if (data.hasExtra(PaymentActivity.RETURN_ERROR_CODE) &&
-                        data.hasExtra(PaymentActivity.RETURN_ERROR_DESCRIPTION)) {
-                    String error_code = (String) data
-                            .getStringExtra(PaymentActivity.RETURN_ERROR_CODE);
-                    String error_desc = (String) data
-                            .getStringExtra(PaymentActivity.RETURN_ERROR_DESCRIPTION);
-
-                    Toast.makeText(getApplicationContext(), " Got error :"
-                            + error_code + "--- " + error_desc, Toast.LENGTH_SHORT)
-                            .show();
-                    Log.d(TAG + " Code=>", error_code);
-                    Log.d(TAG + " Desc=>", error_desc);
-
+                } else if (resultCode == PaymentActivity.RESULT_CANCELED) {
+                    Toast.makeText(getApplicationContext(), "Transaction Aborted by User",
+                            Toast.LENGTH_SHORT).show();
+                    Log.d(TAG, "User pressed back button");
                     TransactionStatus_Update(3,TransactionIdentifier);
 
                 }
-
-            } else if (resultCode == PaymentActivity.RESULT_CANCELED) {
-                Toast.makeText(getApplicationContext(), "Transaction Aborted by User",
-                        Toast.LENGTH_SHORT).show();
-                Log.d(TAG, "User pressed back button");
-                TransactionStatus_Update(3,TransactionIdentifier);
-
             }
         }
+
+        catch(Exception ex)
+        {
+
+        }
+
+       finally {
+            progressDialog.dismiss();
+        }
+
+
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        startActivity(new Intent(getApplicationContext(), PreCheckoutActivity.class));
+        }
 
 }

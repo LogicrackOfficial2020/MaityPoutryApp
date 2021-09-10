@@ -22,8 +22,8 @@
         <LinearLayout
             android:layout_width="207dp"
             android:layout_height="wrap_content"
-
-            android:padding="8dp">
+            android:padding="8dp"
+            android:id="@+id/lin_productdetails">
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/card_view"
@@ -43,7 +43,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="200dp"
                         android:scaleType="centerCrop"
-                        android:src="@drawable/no_image" />
+                        android:adjustViewBounds="true"
+                        android:src="@drawable/chicken" />
 
                     <ProgressBar
                         android:id="@+id/progressbar"
@@ -155,10 +156,10 @@
                 </RelativeLayout>
 
 
-                <RelativeLayout
+                <LinearLayout
                     android:layout_width="wrap_content"
-
-                    android:layout_height="wrap_content">
+                     android:layout_height="wrap_content"
+                    android:orientation="horizontal">
 
                     <TextView
                         android:id="@+id/shop_now"
@@ -168,10 +169,23 @@
                         android:layout_height="wrap_content"
                         android:layout_centerHorizontal="true"
                         android:layout_marginTop="10dp"
-
+                        android:background="@drawable/shop_button_bg"
+                        android:padding="10dp"
+                        android:layout_marginLeft="2dp"
+                        android:text="Shop Now"
+                        android:textColor="@color/gen_white" />
+                    <TextView
+                        android:id="@+id/view_now"
+                        android:visibility="gone"
+                        style="@android:style/MediaButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="10dp"
                         android:background="@drawable/shop_button_bg"
                         android:padding="10dp"
                         android:text="Shop Now"
+                        android:layout_marginLeft="10dp"
                         android:textColor="@color/gen_white" />
 
                     <LinearLayout
@@ -298,7 +312,7 @@
                         android:text="add to cart"
                         android:textColor="@color/gen_white" />
                     </LinearLayout>
-                </RelativeLayout>
+                </LinearLayout>
 
             </androidx.cardview.widget.CardView>
 

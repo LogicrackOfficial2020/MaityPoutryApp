@@ -77,7 +77,14 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.MyViewHolder> 
         holder.currency.setText("Rs.");
         //_subtotal = String.valueOf(Double.parseDouble(_price) * Integer.parseInt(_quantity));
         _subtotal = String.valueOf(subTotalAmount);
+        int item = Integer.parseInt(holder.quantity.getText().toString());
 
+       /* if(item>=5){
+            holder.plus.setVisibility(View.GONE);
+        }
+        else if(item < 5){
+            holder.plus.setVisibility(View.VISIBLE);
+        }*/
         holder.subTotal.setText(_subtotal);
         Picasso.get()
                 .load(cart.getImage())
@@ -101,14 +108,19 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.MyViewHolder> 
                 double pPrice,pSubTotal;
                 String spubTotalAmount;
 
-
                 if (pQuantity >= 1) {
                     int total_item = Integer.parseInt(holder.quantity.getText().toString());
                     total_item++;
+                    /*if(total_item>=5){
+                        holder.plus.setVisibility(View.GONE);
+                    }*/
                     holder.quantity.setText(total_item + "");
                     for (int i = 0; i < cartList.size(); i++) {
 
                         if (cartList.get(i).getId().equalsIgnoreCase(cart.getId())) {
+                           /* if(total_item >= 5){
+                                holder.plus.setVisibility(View.GONE);
+                            }*/
 
                             // Log.d("totalItem", total_item + "");
                             pPrice=Double.parseDouble(holder.price.getText().toString());
@@ -119,6 +131,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.MyViewHolder> 
                             cartList.get(i).setSubTotal(_subtotal);
                             holder.subTotal.setText(_subtotal);
                             String cartStr = gson.toJson(cartList);
+
                             //Log.d("CART", cartStr);
                             localStorage.setCart(cartStr);
                             ((CartActivity) context).updateTotalPrice();
@@ -139,10 +152,15 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.MyViewHolder> 
                 if (pQuantity != 1) {
                     int total_item = Integer.parseInt(holder.quantity.getText().toString());
                     total_item--;
+                   /* if(total_item < 5){
+                        holder.plus.setVisibility(View.VISIBLE);
+                    }*/
                     holder.quantity.setText(total_item + "");
                     for (int i = 0; i < cartList.size(); i++) {
                         if (cartList.get(i).getId().equalsIgnoreCase(cart.getId())) {
-
+                            /*if(total_item < 5){
+                                holder.plus.setVisibility(View.VISIBLE);
+                            }*/
                             //holder.quantity.setText(total_item + "");
                             //Log.d("totalItem", total_item + "");
                             pPrice=Double.parseDouble(holder.price.getText().toString());

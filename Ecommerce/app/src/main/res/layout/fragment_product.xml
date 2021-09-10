@@ -109,11 +109,9 @@
             android:queryBackground="@android:color/transparent"
             />
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
 
-            <EditText
+
+            <TextView
                 android:id="@+id/et_Referral"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -122,6 +120,22 @@
                 android:drawablePadding="5dp"
                 android:gravity="center_vertical"
                 android:text="**Note: You can adjust the quantity of products from 'MyCart' page "
+                android:padding="5dp"
+                android:textStyle="bold"
+                android:textColor="@color/smoke_red"
+                android:textColorHint="@color/red"
+                android:textSize="13sp" />
+
+
+
+            <TextView
+                android:id="@+id/et_Referralc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:drawablePadding="5dp"
+                android:gravity="center_vertical"
+                android:text="**Note: Expected Order Delivery minimun 2 days"
                 android:enabled="false"
                 android:inputType="textEmailAddress"
                 android:padding="5dp"
@@ -129,8 +143,9 @@
                 android:maxLines="2"
                 android:textColor="@color/smoke_red"
                 android:textColorHint="@color/red"
-                android:textSize="6sp" />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:textSize="13sp" />
+
+
 
     </LinearLayout>
 

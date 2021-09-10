@@ -45,6 +45,7 @@ public class CartActivity extends BaseActivity {
     ImageView emptyCart;
     LinearLayout checkoutLL;
     TextView totalPrice;
+
     private String mState = "SHOW_MENU";
 
     @Override

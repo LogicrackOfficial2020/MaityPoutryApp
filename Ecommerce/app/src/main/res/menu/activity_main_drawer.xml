@@ -46,10 +46,10 @@
             android:id="@+id/nav_category"
             android:icon="@drawable/ic_options"
             android:title="Category" />-->
-        <item
+        <!--<item
             android:id="@+id/nav_share"
             android:icon="@drawable/ic_menu_share"
-            android:title="Refer and Earn" />
+            android:title="Refer and Earn" />-->
 
         <item
             android:id="@+id/nav_profile"
@@ -70,6 +70,11 @@
             android:id="@+id/nav_my_cart"
             android:icon="@drawable/ic_shopping_cart_black_24dp"
             android:title="My Cart" />
+
+        <item
+            android:id="@+id/nav_chat"
+            android:icon="@drawable/ic_menu_send"
+            android:title="Chat With Us ?" />
 
         <item
             android:id="@+id/nav_login"

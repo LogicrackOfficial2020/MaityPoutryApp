@@ -106,6 +106,8 @@ public class BaseActivity extends AppCompatActivity implements AddorRemoveCallba
     }
 
 
+
+
     @Override
     public void onAddProduct() {
 

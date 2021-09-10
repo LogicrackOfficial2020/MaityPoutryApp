@@ -101,9 +101,10 @@ public class AddressFragment extends Fragment {
         localStorage = new LocalStorage(getContext());
         gson = new Gson();
         userString = localStorage.getUserLogin();
+        String CartPin=localStorage.getCartPin();
         User user = gson.fromJson(userString, User.class);
 
-        // userAddress = gson.fromJson(localStorage.getUserAddress(), UserAddress.class);
+        userAddress = gson.fromJson(localStorage.getUserAddress(), UserAddress.class);
         Log.d("User String : ", userString);
         if (user != null) {
 
@@ -118,7 +119,8 @@ public class AddressFragment extends Fragment {
 
                 address.setText(user.getPrimaryOrderAddress());
                 sa_Landmark.setText(user.getLandmark());
-                zip.setText(user.getPrimaryOrderPincode());
+                //zip.setText(user.getPrimaryOrderPincode());
+                zip.setText(CartPin);
 
 
          /*   zip.setText(((CheckoutActivity) getActivity()).Pin);
@@ -238,11 +240,6 @@ public class AddressFragment extends Fragment {
                     ((PreCheckoutActivity) getActivity()).OrderShippingContactNo = _mobile;
                     Update_Address_Pin();
 
-
-                    FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
-                    ft.setCustomAnimations(R.anim.slide_from_right, R.anim.slide_to_left);
-                    ft.replace(R.id.content_frame, new ConfirmFragment(),"ConfirmFragment");
-                    ft.commit();
                 }
 
 
@@ -257,34 +254,47 @@ public class AddressFragment extends Fragment {
         progressDialog.setMessage("Please Wait....");
         progressDialog.show();
         String url=Update_Address_Pin_Url+CustomerId+"&PrimaryAddress="+_address+"&PrimaryPincode="+_zip;
+     //  CustomerId="2";
         StringRequest vrequest = new StringRequest(Request.Method.GET, Update_Address_Pin_Url+CustomerId+"&PrimaryAddress="+_address+"&PrimaryPincode="+_zip+"&Landmark="+_landmark,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
 
                         // tv_MyCode.setText(response);
-                        String Msg=response;
-                        if(Msg !="0")
-                        {
-                            user = new User(CustomerId, _name, _email, _mobile,Password,ActualAdress, _address, _zip,_landmark,ReferStatus);
-                            Gson gson = new Gson();
-                            String userString = gson.toJson(user);
-                            localStorage = new LocalStorage(getContext());
-                            localStorage.createUserLoginSession(userString);
-                            progressDialog.dismiss();
+                        //String Msg=response;
+                        try {
+                            JSONObject obj = new JSONObject(response);
+                            String ShemeCode=obj.getString("ShemeCode");
+                            String Msg=obj.getString("Msg");
+                            if (Msg != "0") {
+                             //   ((PreCheckoutActivity) getActivity()).CompanyId=CompanyId;
+                              //  ((PreCheckoutActivity) getActivity()).ShemeCode=ShemeCode;
+                                user = new User(CustomerId, _name, _email, _mobile, Password, ActualAdress, _address, _zip, _landmark, ReferStatus);
+                                Gson gson = new Gson();
+                                String userString = gson.toJson(user);
+                                localStorage = new LocalStorage(getContext());
+                                localStorage.createUserLoginSession(userString);
+                                progressDialog.dismiss();
+
+                                FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+                                ft.setCustomAnimations(R.anim.slide_from_right, R.anim.slide_to_left);
+                                ft.replace(R.id.content_frame, new confirmFragment2(),"confirmFragment2");
+                                ft.commit();
+                            }
+                            else {
+                                ((PreCheckoutActivity) getActivity()).ShemeCode=ShemeCode;
+                                Toast.makeText(getContext(), "Some Things Error Please Try Again ", Toast.LENGTH_LONG).show();
+                                progressDialog.dismiss();
+                            }
                         }
-                        else {
-                            Toast.makeText(getContext(),"Some Things Error Please Try Again ",Toast.LENGTH_LONG).show();
+                        catch (JSONException e) {
+
                             progressDialog.dismiss();
+                            e.printStackTrace();
                         }
-
-
-                        //   setUpSubCategoryAdapter(categories);
-
-
 
                     }
-                }, new Response.ErrorListener() {
+             }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 progressDialog.dismiss();
@@ -296,6 +306,11 @@ public class AddressFragment extends Fragment {
         requestQueue.add(vrequest);
 
     }
+
+
+
+
+
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     private void init() {
         stringArrayState = new ArrayList<String>();

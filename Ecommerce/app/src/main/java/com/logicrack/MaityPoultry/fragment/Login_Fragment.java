@@ -283,9 +283,10 @@ public class Login_Fragment extends Fragment implements OnClickListener {
                 StringRequest stringRequest = new StringRequest(Request.Method.POST, LOGIN_URL,
                 new Response.Listener<String>() {
                     @Override
-                    public void onResponse(String response) {
-
-                        try {
+                    public void onResponse(String response)
+                    {
+                        try
+                        {
                             JSONObject obj = new JSONObject(response);
                             /*  if (!obj.getBoolean("error")){*/
                             int CustId=obj.getInt("CustomerId");
@@ -350,7 +351,8 @@ public class Login_Fragment extends Fragment implements OnClickListener {
                                 vibrate(200);
                             }*/
 
-                        } catch (JSONException e) {
+                        }
+                        catch (JSONException e) {
 
                             progressDialog.dismiss();
                             e.printStackTrace();

@@ -32,6 +32,12 @@ public class Product {
     public String ProdManufacturedBy ;
 
    public int ProductPriceId;
+
+    String ProdQuantity;
+    String Product_PriceId;
+    String TotalAmount;
+    String Savings;
+    String OrderId;
     public DateFormat ProdManufacturedDate ;
 public  float MarketPrice;
 
@@ -70,7 +76,15 @@ public  float MarketPrice;
         this.PurchaseQuantity = PurchaseQuantity;
         this.SellQuantity = SellQuantity;
     }
+    public Product(String OrderId,String ProdName, String ProdQuantity,String Product_PriceId,String TotalAmount,String Savings ){
+        this.OrderId=OrderId;
+        this.ProdName=ProdName;
+        this.ProdQuantity=ProdQuantity;
 
+        this.Product_PriceId=Product_PriceId;
+        this.TotalAmount=TotalAmount;
+        this.Savings=Savings;
+    }
     public Product(String id, String categoryId, String title, String description, String attribute, String currency, String price, String discount, String image) {
         this.id = id;
         this.categoryId = categoryId;
@@ -142,7 +156,7 @@ public  float MarketPrice;
         this.ProdDetails = description;
     }
 
-    public String getAttribute() {
+   public String getAttribute() {
         return PackageQty + PackageUnit;
     }
 
@@ -188,5 +202,45 @@ public  float MarketPrice;
 
     public void setProductPriceId(int ProductPriceId) {
         this.ProductPriceId = ProductPriceId;
+    }
+
+
+    public String getProdQuantity() {
+        return String.valueOf(ProdQuantity);
+    }
+
+    public void setProdQuantity(String ProdQuantity) {
+        this.ProdQuantity = ProdQuantity;
+    }
+
+    public String getProduct_PriceId() {
+        return String.valueOf(Product_PriceId);
+    }
+
+    public void setProduct_PriceId(String Product_PriceId) {
+        this.Product_PriceId = Product_PriceId;
+    }
+
+    public String getTotalAmount() {
+        return String.valueOf(TotalAmount);
+    }
+
+    public void setTotalAmount(String TotalAmount) {
+        this.TotalAmount = TotalAmount;
+    }
+
+    public String getSavings() {
+        return String.valueOf(Savings);
+    }
+
+    public void setSavings(String Savings) {
+        this.Savings = Savings;
+    }
+    public String getOrderId() {
+        return String.valueOf(OrderId);
+    }
+
+    public void setOrderId(String OrderId) {
+        this.OrderId = OrderId;
     }
 }

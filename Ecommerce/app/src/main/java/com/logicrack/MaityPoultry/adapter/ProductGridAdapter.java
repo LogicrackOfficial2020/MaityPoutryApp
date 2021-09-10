@@ -2,6 +2,7 @@
 package com.logicrack.MaityPoultry.adapter;
 
         import android.content.Context;
+        import android.content.Intent;
         import android.graphics.Paint;
         import android.util.Log;
         import android.view.LayoutInflater;
@@ -19,6 +20,7 @@ package com.logicrack.MaityPoultry.adapter;
         import com.logicrack.MaityPoultry.R;
         import com.logicrack.MaityPoultry.activity.BaseActivity;
         import com.logicrack.MaityPoultry.activity.MainActivity;
+        import com.logicrack.MaityPoultry.activity.ProductViewActivity;
         import com.logicrack.MaityPoultry.interfaces.AddorRemoveCallbacks;
         import com.logicrack.MaityPoultry.model.Cart;
         import com.logicrack.MaityPoultry.model.Product;
@@ -39,6 +41,7 @@ public class ProductGridAdapter extends BaseAdapter {
 
     LocalStorage localStorage;
     Gson gson;
+    String Pincode;
     List<Cart> cartList = new ArrayList<>();
     String _quantity, _price, _attribute, _subtotal;
     private LayoutInflater inflater;
@@ -48,10 +51,11 @@ public class ProductGridAdapter extends BaseAdapter {
         this.context = context;
     }
 
-    public ProductGridAdapter(List<Product> productList, Context context, String tag) {
+    public ProductGridAdapter(List<Product> productList, Context context, String tag,String Pincode) {
         this.productList = productList;
         this.context = context;
         Tag = tag;
+        this.Pincode=Pincode;
     }
 
     @Override
@@ -83,6 +87,7 @@ public class ProductGridAdapter extends BaseAdapter {
         final TextView title, attribute, currency, price, shopNow;
         final ProgressBar progressBar;
         final LinearLayout quantity_ll;
+        final  LinearLayout lin_productdetails;
         final TextView plus, minus, quantity,Discount_price;
         CardView cardView;
 
@@ -98,6 +103,7 @@ public class ProductGridAdapter extends BaseAdapter {
         plus = view.findViewById(R.id.quantity_plus);
         minus = view.findViewById(R.id.quantity_minus);
         cardView = view.findViewById(R.id.card_view);
+        lin_productdetails=view.findViewById(R.id.lin_productdetails);
 
         Discount_price= view.findViewById(R.id.Discount_price);
 
@@ -161,13 +167,15 @@ public class ProductGridAdapter extends BaseAdapter {
                     _subtotal = String.valueOf(Double.parseDouble(_price) * Integer.parseInt(_quantity));
 
                     if (context instanceof MainActivity) {
-                        Cart cart = new Cart(product.getProductPriceId(), product.getTitle(), product.getImage(), product.getCurrency(), _price, _attribute, _quantity, _subtotal);
+                        Cart cart = new Cart(product.getProductPriceId(), product.getTitle(), product.getImage(), product.getCurrency(), _price, _attribute, _quantity, _subtotal,Pincode);
                         cartList = ((BaseActivity) context).getCartList();
                         cartList.add(cart);
 
                         String cartStr = gson.toJson(cartList);
+                        String carPin=Pincode;
                         //Log.d("CART", cartStr);
                         localStorage.setCart(cartStr);
+                        localStorage.setCartPin(carPin);
                         ((AddorRemoveCallbacks) context).onAddProduct();
                        //notify();
                     }
@@ -192,8 +200,10 @@ public class ProductGridAdapter extends BaseAdapter {
 
                         cartList.get(i).setImage(product.getImage());
                         String cartStr = gson.toJson(cartList);
+                        String carPin=Pincode;
                         //Log.d("CART", cartStr);
                         localStorage.setCart(cartStr);
+                        localStorage.setCartPin(carPin);
                     }
                 }
 
@@ -219,8 +229,10 @@ public class ProductGridAdapter extends BaseAdapter {
                             cartList.get(i).setQuantity(quantity.getText().toString());
                             cartList.get(i).setSubTotal(_subtotal);
                             String cartStr = gson.toJson(cartList);
+                            String carPin=Pincode;
                             //Log.d("CART", cartStr);
                             localStorage.setCart(cartStr);
+                            localStorage.setCartPin(carPin);
 
                         }
                     }
@@ -230,6 +242,26 @@ public class ProductGridAdapter extends BaseAdapter {
 
             }
         });
+
+        lin_productdetails.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, ProductViewActivity.class);
+                intent.putExtra("id", product.getId());
+                intent.putExtra("title", product.getTitle());
+                intent.putExtra("image", product.getImage());
+                intent.putExtra("price", product.getPrice());
+                intent.putExtra("currency", product.getCurrency());
+                intent.putExtra("attribute", product.getAttribute());
+                intent.putExtra("discount", product.getDiscount());
+                intent.putExtra("description", product.getDescription());
+
+
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                context.startActivity(intent);
+            }
+        });
+
 
 
 

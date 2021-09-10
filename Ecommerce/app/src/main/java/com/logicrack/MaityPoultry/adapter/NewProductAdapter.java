@@ -39,17 +39,18 @@ public class NewProductAdapter extends RecyclerView.Adapter<NewProductAdapter.My
     LocalStorage localStorage;
     Gson gson;
     List<Cart> cartList = new ArrayList<>();
-    String _quantity, _price, _attribute, _subtotal;
+    String _quantity, _price, _attribute, _subtotal,PinCode;
 
     public NewProductAdapter(List<Product> productList, Context context) {
         this.productList = productList;
         this.context = context;
     }
 
-    public NewProductAdapter(List<Product> productList, Context context, String tag) {
+    public NewProductAdapter(List<Product> productList, Context context, String tag,String Pincode) {
         this.productList = productList;
         this.context = context;
         Tag = tag;
+        this.PinCode=Pincode;
     }
 
     @NonNull
@@ -137,7 +138,7 @@ public class NewProductAdapter extends RecyclerView.Adapter<NewProductAdapter.My
                     _subtotal = String.valueOf(Double.parseDouble(_price) * Integer.parseInt(_quantity));
 
                     if (context instanceof MainActivity) {
-                        Cart cart = new Cart(product.getProductPriceId(), product.getTitle(),  product.getImage(), product.getCurrency(), _price, _attribute, _quantity, _subtotal);
+                        Cart cart = new Cart(product.getProductPriceId(), product.getTitle(),  product.getImage(), product.getCurrency(), _price, _attribute, _quantity, _subtotal,PinCode);
                         cartList = ((BaseActivity) context).getCartList();
                         cartList.add(cart);
 

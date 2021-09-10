@@ -46,7 +46,7 @@ public class ProductViewActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_product_view);
+        setContentView(R.layout.activity_product_details);
 
 
         Intent intent = getIntent();
@@ -88,16 +88,16 @@ public class ProductViewActivity extends BaseActivity {
         cartList = getCartList();
         title.setText(_title);
         description.setText(_description);
-        price.setText(_price);
-        currency.setText(_currency);
+        price.setText("Rs. "+ _price);
+        currency.setText("Item "+ _currency +" :");
         attribute.setText(_attribute);
         discount.setText(_discount);
         Log.d(TAG, "Discount : " + _discount);
-        if (_discount != null || _discount.length() != 0 || _discount != "") {
+      /*  if (_discount != null || _discount.length() != 0 || _discount != "") {
             discount.setVisibility(View.VISIBLE);
         } else {
             discount.setVisibility(View.GONE);
-        }
+        }*/
         if (_image != null) {
             Picasso.get().load(_image).error(R.drawable.no_image).into(imageView, new Callback() {
                 @Override
@@ -216,7 +216,7 @@ public class ProductViewActivity extends BaseActivity {
         tv.setGravity(Gravity.CENTER);
         tv.setTypeface(null, Typeface.BOLD);
         // Set text to display in TextView
-        tv.setText(_title); // ActionBar title text
+        tv.setText("Product's Details"); // ActionBar title text
         tv.setTextSize(20);
 
         // Set the text color of TextView to red

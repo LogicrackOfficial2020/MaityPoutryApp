@@ -10,6 +10,7 @@ import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import com.logicrack.MaityPoultry.R;
+import com.logicrack.MaityPoultry.activity.MainActivity;
 
 
 public class HomeSliderAdapter extends PagerAdapter {
@@ -17,20 +18,23 @@ public class HomeSliderAdapter extends PagerAdapter {
     private Context context;
     private LayoutInflater layoutInflater;
     private Integer[] images;
+    String Pincode;
 
     public HomeSliderAdapter(Context context) {
         this.context = context;
     }
 
-    public HomeSliderAdapter(Context context, Integer[] images) {
+    public HomeSliderAdapter(Context context, Integer[] images,String Pincode) {
         this.context = context;
         this.images = images;
+        this.Pincode=Pincode;
     }
 
     @Override
     public int getCount() {
         return images.length;
     }
+
 
     @Override
     public boolean isViewFromObject(View view, Object object) {
@@ -45,6 +49,17 @@ public class HomeSliderAdapter extends PagerAdapter {
         ImageView imageView = view.findViewById(R.id.imageView);
         imageView.setImageResource(images[position]);
 
+      //  String BannerPincode=((MainActivity)context).BannerPinCode;
+       imageView.setOnClickListener(new View.OnClickListener(){
+       int category_id=0;
+       String SearchProduct="";
+
+
+           @Override
+           public void onClick(View view) {
+               ((MainActivity)context).onAdapterCalled(category_id,"subcategory",SearchProduct,"");
+           }
+       });
 
         ViewPager vp = (ViewPager) container;
         vp.addView(view, 0);

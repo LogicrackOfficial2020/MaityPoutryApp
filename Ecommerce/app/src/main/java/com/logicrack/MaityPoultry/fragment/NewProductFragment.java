@@ -19,6 +19,7 @@ import com.logicrack.MaityPoultry.helper.Data;
 public class NewProductFragment extends Fragment {
     RecyclerView nRecyclerView;
     Data data;
+    String Pincode="700145";
     private NewProductAdapter pAdapter;
 
     public NewProductFragment() {
@@ -33,7 +34,7 @@ public class NewProductFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_new, container, false);
         data = new Data();
         nRecyclerView = view.findViewById(R.id.new_product_rv);
-        pAdapter = new NewProductAdapter(data.getNewList(), getContext(), "new");
+        pAdapter = new NewProductAdapter(data.getNewList(), getContext(), "new",Pincode);
         RecyclerView.LayoutManager pLayoutManager = new LinearLayoutManager(getContext());
         nRecyclerView.setLayoutManager(pLayoutManager);
         nRecyclerView.setItemAnimator(new DefaultItemAnimator());

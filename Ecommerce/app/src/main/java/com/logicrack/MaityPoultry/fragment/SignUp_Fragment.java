@@ -242,7 +242,7 @@ public class SignUp_Fragment extends Fragment implements OnClickListener {
                                 progressDialog.dismiss();
 
                                 new CustomToast().Show_Toast(getActivity(), view,
-                                        "Email Id already Exist try again...");
+                                        Msg);
                                 vibrate(200);
                             }
 
@@ -269,7 +269,6 @@ public class SignUp_Fragment extends Fragment implements OnClickListener {
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String,String> map = new HashMap<>();
                 map.put("FName", getfirstName);
-
                 map.put("LName", getlastName);
                 map.put("Email", getEmailId);
                 map.put("MobNo", getMobileNumber);

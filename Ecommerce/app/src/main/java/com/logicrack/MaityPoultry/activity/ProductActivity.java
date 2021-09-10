@@ -33,7 +33,7 @@ public class ProductActivity extends BaseActivity {
     ProductAdapter mAdapter;
     String Tag = "List";
     private RecyclerView recyclerView;
-
+String Pincode;
     @SuppressLint("ResourceAsColor")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,7 +80,7 @@ public class ProductActivity extends BaseActivity {
 
     private void setUpRecyclerView() {
         data = new Data();
-        mAdapter = new ProductAdapter(data.getProductList(), ProductActivity.this, Tag);
+        mAdapter = new ProductAdapter(data.getProductList(), ProductActivity.this, Tag,Pincode);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -90,7 +90,7 @@ public class ProductActivity extends BaseActivity {
 
     private void setUpGridRecyclerView() {
         data = new Data();
-        mAdapter = new ProductAdapter(data.getProductList(), ProductActivity.this, Tag);
+        mAdapter = new ProductAdapter(data.getProductList(), ProductActivity.this, Tag,Pincode);
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getApplicationContext(), 2);
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());

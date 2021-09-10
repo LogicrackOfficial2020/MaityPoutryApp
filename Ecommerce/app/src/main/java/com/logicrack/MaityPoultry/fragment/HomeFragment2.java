@@ -1,13 +1,19 @@
 package com.logicrack.MaityPoultry.fragment;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Vibrator;
+import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +31,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
@@ -37,33 +44,41 @@ import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.logicrack.MaityPoultry.R;
 import com.logicrack.MaityPoultry.activity.MainActivity;
+import com.logicrack.MaityPoultry.adapter.CartAdapter;
 import com.logicrack.MaityPoultry.adapter.CategoryAdapter;
 import com.logicrack.MaityPoultry.adapter.CategotyAdapter2;
+import com.logicrack.MaityPoultry.adapter.CouponPopUpAdapter;
 import com.logicrack.MaityPoultry.adapter.GridAdapter;
 import com.logicrack.MaityPoultry.adapter.HomeSliderAdapter;
 import com.logicrack.MaityPoultry.adapter.NewProductAdapter;
+import com.logicrack.MaityPoultry.adapter.PincodeAdapter;
 import com.logicrack.MaityPoultry.adapter.PopularProductAdapter;
 import com.logicrack.MaityPoultry.helper.Data;
+import com.logicrack.MaityPoultry.model.Cart;
 import com.logicrack.MaityPoultry.model.CateGoryModel;
 import com.logicrack.MaityPoultry.model.Category;
+import com.logicrack.MaityPoultry.model.CouponModel;
+import com.logicrack.MaityPoultry.model.CustomerPinCode;
 import com.logicrack.MaityPoultry.model.User;
 import com.logicrack.MaityPoultry.util.CustomToast;
 import com.logicrack.MaityPoultry.util.ExpandableHeightGridView;
 import com.logicrack.MaityPoultry.util.localstorage.LocalStorage;
 
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
 
 public class HomeFragment2 extends Fragment implements View.OnClickListener {
 
-
+    public static Dialog dialog;
     ViewPager viewPager;
     private static View view;
     LinearLayout sliderDotspanel;
@@ -81,12 +96,17 @@ public class HomeFragment2 extends Fragment implements View.OnClickListener {
     private Integer[] images = {R.drawable.poultry1, R.drawable.poultry2, R.drawable.poultry3, R.drawable.poultry4, R.drawable.poultry5, R.drawable.poultry6, R.drawable.poultry7};
     private String CategoryRoot;
     private final String URL = "http://123api.123homepaints.com/api/KitchenRefill/App_Category_GetByCategoryRoot?CategoryRoot=";
+    private final String usp_PinCust_GetAll = "http://123api.123homepaints.com/api/KitchenRefill/usp_PinCust_GetAll";
     ProgressDialog progressDialog;
     private List<CateGoryModel> categories = new ArrayList<>();
+    List<CustomerPinCode> customerPinCodeList = new ArrayList<>();
     private ExpandableHeightGridView category_gridView;
     EditText editProSearch,txt_pincode;
-    TextView btn_searPro,btn_submit;
+    TextView btn_searPro,btn_submit,btn_seepincode;
     SearchView productSearchView;
+    CartAdapter adapter;
+    List<Cart> cartList = new ArrayList<>();
+    private String mState = "SHOW_MENU";
 
 
 
@@ -97,6 +117,7 @@ public class HomeFragment2 extends Fragment implements View.OnClickListener {
     public Boolean ReferStatus;
 
     String SearchProduct="";
+    String CheckPincode;
     int category_id=0;
     public HomeFragment2() {
         // Required empty public constructor
@@ -135,7 +156,13 @@ public class HomeFragment2 extends Fragment implements View.OnClickListener {
         txt_pincode= view.findViewById(R.id.txt_pincode);
         btn_searPro= view.findViewById(R.id.btn_searPro);
         btn_submit= view.findViewById(R.id.btn_submit);
+        btn_seepincode= view.findViewById(R.id.btn_seepincode);
         productSearchView=view.findViewById(R.id.productSearchView);
+
+
+
+
+        GetAllPincode();
 
         Pincode=((MainActivity) getActivity()).Pincode;
         CusId=((MainActivity) getActivity()).CusId;
@@ -153,14 +180,18 @@ public class HomeFragment2 extends Fragment implements View.OnClickListener {
 
 
 
-         if (Pincode.length() == 0  || Pincode.equals("")) {
+
+
+
+
+        if (Pincode.length() == 0  || Pincode.equals("")) {
             txt_pincode.setError("Enter Your Pincode ");
             txt_pincode.requestFocus();
         }
         else {
             txt_pincode.setText(Pincode);
          }
-
+        CheckPincode=Pincode;
         productSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -197,6 +228,7 @@ public class HomeFragment2 extends Fragment implements View.OnClickListener {
         lin_Stationary.setOnClickListener(this);
         btn_searPro.setOnClickListener(this);
         btn_submit.setOnClickListener(this);
+        btn_seepincode.setOnClickListener(this);
 
 
 
@@ -222,7 +254,7 @@ public class HomeFragment2 extends Fragment implements View.OnClickListener {
 
         sliderDotspanel = view.findViewById(R.id.SliderDots);
 
-        HomeSliderAdapter viewPagerAdapter = new HomeSliderAdapter(getContext(), images);
+        HomeSliderAdapter viewPagerAdapter = new HomeSliderAdapter(getContext(), images,Pincode);
 
         viewPager.setAdapter(viewPagerAdapter);
 
@@ -267,6 +299,14 @@ public class HomeFragment2 extends Fragment implements View.OnClickListener {
 
             }
         });
+        /*viewPager.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View view) {
+
+                ((MainActivity)getActivity()).onAdapterCalled(category_id,"subcategory",SearchProduct,Pincode);
+            }
+        });*/
         scheduleSlider();
 
         return view;
@@ -301,6 +341,7 @@ public class HomeFragment2 extends Fragment implements View.OnClickListener {
             }
         }, 500, 4000);
     }
+
 
     @Override
     public void onStop() {
@@ -391,7 +432,7 @@ public class HomeFragment2 extends Fragment implements View.OnClickListener {
 
                 Pincode=txt_pincode.getText().toString();
                 if (Pincode.length() == 0  || Pincode.equals("")) {
-                    txt_pincode.setError("Enter Your Pincode ");
+                    txt_pincode.setError("Enter Your Delivery Pincode ");
                     txt_pincode.requestFocus();
                 }
                 else  if(Pincode.length() < 6|| Pincode.length() > 6){
@@ -399,6 +440,7 @@ public class HomeFragment2 extends Fragment implements View.OnClickListener {
                     txt_pincode.requestFocus();
                 }
                 else {
+                    ((MainActivity) getActivity()).BannerPinCode=Pincode;
                     CateGoryModel category = categories.get(position);
 
                     category_id = category.getCategoryId();
@@ -424,6 +466,68 @@ public class HomeFragment2 extends Fragment implements View.OnClickListener {
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(mAdapter);
     }
+
+    private void GetAllPincode( ){
+
+        progressDialog.setMessage("Please Wait....");
+        progressDialog.show();
+
+        StringRequest vrequest = new StringRequest(Request.Method.GET, usp_PinCust_GetAll,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+                            JSONArray array = jsonObject.getJSONArray("pincodes");
+                            if(array.length()!=0)
+                            {
+                                btn_seepincode.setVisibility(View.VISIBLE);
+                            }
+
+                            customerPinCodeList.clear();
+
+                            for (int i = 0; i <array.length() ; i++) {
+
+                                JSONObject object = array.getJSONObject(i);
+
+                                String ZoneName = object.getString("ZoneName");
+                                String PinCode = object.getString("PinCode");
+                                String BrachName = object.getString("BrachName");
+
+
+                                CustomerPinCode obj = new CustomerPinCode(ZoneName,PinCode,BrachName);
+                                customerPinCodeList.add(obj);
+
+
+
+                            }
+
+                        } catch (JSONException e)
+                        {
+                            progressDialog.dismiss();
+                            e.printStackTrace();
+                        }
+                        progressDialog.dismiss();
+                        //   setUpSubCategoryAdapter(categories);
+
+
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                progressDialog.dismiss();
+                Toast.makeText(getContext(),error.getMessage(),Toast.LENGTH_LONG).show();
+
+                btn_seepincode.setVisibility(View.GONE);
+            }
+        });
+
+        RequestQueue requestQueue = Volley.newRequestQueue(getContext());
+        requestQueue.add(vrequest);
+
+    }
+
 
     @Override
     public void onClick(View v)
@@ -513,7 +617,7 @@ public class HomeFragment2 extends Fragment implements View.OnClickListener {
                     txt_pincode.requestFocus();
                 }
                 else  if(Pincode.length() < 6|| Pincode.length() > 6){
-                    txt_pincode.setError("Enter Valid Pincode ");
+                    txt_pincode.setError("Enter a Valid Pincode ");
                     txt_pincode.requestFocus();
                 }
                 else
@@ -534,23 +638,125 @@ public class HomeFragment2 extends Fragment implements View.OnClickListener {
                 }
                 else {
                     progressDialog.dismiss();
+                    cartList=((MainActivity) getActivity()).getCartList();
 
-                    ShowAleartDialog("Pincode Save Successful");
-                    user = new User(CusId, Name, Email, ContactNo, Password, Address, "",Pincode,"",ReferStatus);
-                    Gson gson = new Gson();
-                    String userString = gson.toJson(user);
-                    localStorage = new LocalStorage(getContext());
-                    localStorage.createUserLoginSession(userString);
+
+                    if(!cartList.isEmpty())
+                    {
+                        ((MainActivity) getActivity()).BannerPinCode=Pincode;
+                        if(!Pincode.equals(CheckPincode)){
+                            AlertDialog diaBox = showDeleteDialog();
+                            diaBox.show();
+                        }
+                    }
+                    else {
+                        user = new User(CusId, Name, Email, ContactNo, Password, Address, "",Pincode,"",ReferStatus);
+                        Gson gson = new Gson();
+                        String userString = gson.toJson(user);
+                        localStorage = new LocalStorage(getContext());
+                        localStorage.createUserLoginSession(userString);
+                        ((MainActivity) getActivity()).BannerPinCode=Pincode;
+                        ShowAleartDialog("Pincode Save Successful");
+                    }
+
                 }
 
                 break;
-
+            case R.id.btn_seepincode:
+                showDialog(customerPinCodeList);
+                break;
 
 
 
         }
 
     }
+
+
+    @NotNull
+    private AlertDialog showDeleteDialog() {
+        AlertDialog myQuittingDialogBox = new AlertDialog.Builder(getContext())
+
+                //set message, title, and icon
+                .setTitle("Message")
+                .setMessage("Are You Sure Changing Your Delivery Pincode ?? If You Change your Pincode then Your All Added Cart Items Will Be Remove..")
+                .setIcon(R.drawable.ic_delete_black_24dp)
+
+                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+
+                    public void onClick(DialogInterface dialog, int whichButton) {
+
+                        user = new User(CusId, Name, Email, ContactNo, Password, Address, "",Pincode,"",ReferStatus);
+                        Gson gson = new Gson();
+                        String userString = gson.toJson(user);
+                        localStorage = new LocalStorage(getContext());
+                        localStorage.createUserLoginSession(userString);
+                        localStorage.deleteCart();
+                        mState = "HIDE_MENU";
+                        ((MainActivity) getActivity()).BannerPinCode=Pincode;
+                        ((MainActivity) getActivity()).OptionMenu();
+                        getActivity().finish();
+                        getActivity().overridePendingTransition(0, 0);
+                        startActivity(getActivity().getIntent());
+                        getActivity().overridePendingTransition(0, 0);
+
+                        dialog.dismiss();
+                    }
+
+                })
+
+                .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        txt_pincode.setText(CheckPincode);
+                        Pincode=txt_pincode.getText().toString();
+                        dialog.dismiss();
+
+                    }
+                })
+                .create();
+        return myQuittingDialogBox;
+    }
+
+
+
+
+
+
+    public void showDialog(List<CustomerPinCode> customerPinCodeList) {
+
+        if(customerPinCodeList.size()>0) {
+
+            dialog = new Dialog(getContext());
+            // dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            dialog.setCancelable(true);
+            dialog.setContentView(R.layout.fragment_pincodelist);
+
+
+            RecyclerView recyclerView = dialog.findViewById(R.id.rec_pincodelist);
+            PincodeAdapter adapterRe = new PincodeAdapter(getContext(), customerPinCodeList);
+            recyclerView.setAdapter(adapterRe);
+            recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+
+
+/*
+            recyclerView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                }
+            });
+*/
+
+            dialog.show();
+        }
+        else
+        {
+            Toast.makeText(getContext(),"No Pincode are available",Toast.LENGTH_LONG).show();
+        }
+
+
+    }
+
     private void ShowAleartDialog(String response)
     {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());

@@ -12,12 +12,13 @@ public class Cart {
     String subTotal;
 int ProductPriceId;
     String ProductQuantity;
+    String Pincode;
 
     public Cart() {
     }
 
 
-    public Cart(String id, String title, String image, String currency, String price, String attribute, String quantity, String subTotal) {
+    public Cart(String id, String title, String image, String currency, String price, String attribute, String quantity, String subTotal,String Pincode) {
         this.id = id;
         this.image = image;
         this.title = title;
@@ -26,6 +27,7 @@ int ProductPriceId;
         this.attribute = attribute;
         this.quantity = quantity;
         this.subTotal = subTotal;
+        this.Pincode=Pincode;
      /*   this.ProductPriceId = ProductPriceId;
         this.ProductQuantity = ProductQuantity;*/
     }
@@ -108,5 +110,13 @@ int ProductPriceId;
 
     public void setCurrency(String currency) {
         this.currency = currency;
+    }
+
+    public String getPincode() {
+        return Pincode;
+    }
+
+    public void setPincode(String Pincode) {
+        this.Pincode = Pincode;
     }
 }

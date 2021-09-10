@@ -39,6 +39,7 @@ public class HomeFragment extends Fragment {
     Timer timer;
     int page_position = 0;
     Data data;
+    String PinCode= "700145";
     private int dotscount;
     private ImageView[] dots;
     private List<Category> categoryList = new ArrayList<>();
@@ -69,13 +70,13 @@ public class HomeFragment extends Fragment {
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(mAdapter);
 
-        nAdapter = new NewProductAdapter(data.getNewList(), getContext(), "Home");
+        nAdapter = new NewProductAdapter(data.getNewList(), getContext(), "Home",PinCode);
         RecyclerView.LayoutManager nLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         nRecyclerView.setLayoutManager(nLayoutManager);
         nRecyclerView.setItemAnimator(new DefaultItemAnimator());
         nRecyclerView.setAdapter(nAdapter);
 
-        pAdapter = new PopularProductAdapter(data.getPopularList(), getContext(), "Home");
+        pAdapter = new PopularProductAdapter(data.getPopularList(), getContext(), "Home",PinCode);
         RecyclerView.LayoutManager pLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         pRecyclerView.setLayoutManager(pLayoutManager);
         pRecyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -87,7 +88,7 @@ public class HomeFragment extends Fragment {
 
         sliderDotspanel = view.findViewById(R.id.SliderDots);
 
-        HomeSliderAdapter viewPagerAdapter = new HomeSliderAdapter(getContext(), images);
+        HomeSliderAdapter viewPagerAdapter = new HomeSliderAdapter(getContext(), images,PinCode);
 
         viewPager.setAdapter(viewPagerAdapter);
 

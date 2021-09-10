@@ -97,10 +97,23 @@ public class LocalStorage {
         else return null;
     }
 
+    public String getCartPin(){
+        if (sharedPreferences.contains("CarPin"))
+            return sharedPreferences.getString("CarPin", null);
+        else return null;
+    }
+
 
     public void setCart(String cart) {
         Editor editor = sharedPreferences.edit();
         editor.putString("CART", cart);
+        editor.commit();
+    }
+
+
+    public void setCartPin(String Pincode) {
+        Editor editor = sharedPreferences.edit();
+        editor.putString("CarPin",Pincode);
         editor.commit();
     }
 

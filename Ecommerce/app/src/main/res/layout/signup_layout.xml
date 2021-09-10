@@ -169,7 +169,7 @@
                     android:background="@android:color/transparent"
                     android:drawablePadding="8dp"
                     android:gravity="center_vertical"
-                    android:hint="@string/passowrd"
+                    android:hint="Create Password(Minimum 6 Digit Password)"
                     android:inputType="textPassword"
                     android:padding="10dp"
                     android:singleLine="true"

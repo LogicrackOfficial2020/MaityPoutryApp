@@ -81,7 +81,7 @@ public class ConfirmFragment extends Fragment   {
     int CustomerId;
     View view;
     JSONArray jsonArray = new JSONArray();
-    String jsonText;
+    String jsonText,ShemeCode;
     List<Cart> cartitems = new ArrayList<>();
 List<CouponModel> couponModelList = new ArrayList<>();
     RadioButton card, cash;
@@ -93,11 +93,14 @@ List<CouponModel> couponModelList = new ArrayList<>();
     private final String OrderSave_URL = "http://123api.123homepaints.com/api/KitchenRefill/OrderPlace";
     private final String CouponAmountURL = "http://123api.123homepaints.com/api/KitchenRefill/CouponMaster_GetAmountforApply?CouponCode=";
     private final String GetAmountDiscount = "http://123api.123homepaints.com/api/KitchenRefill/App_GetShippingDiscount_Amount?OrderAmount=";
+    private final String SendSMSFor_Order = "http://123api.123homepaints.com/api/KitchenRefill/SendSMSFor_Order?OrderId=";
+
 
     private final String OrderDetails_Url = "http://123api.123homepaints.com/api/KitchenRefill/OrderDetailSave";
     private final String GetCouponByCustomerId_Url = "http://123api.123homepaints.com/api/KitchenRefill/CouponMaster_GetByCustomerId?CustomerId=";
 
      public Double DiscountAmount,ShippingAmount,CouponAmount;
+     public  int CompanyId;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -165,6 +168,8 @@ List<CouponModel> couponModelList = new ArrayList<>();
 
 
          CustomerId =   ((PreCheckoutActivity) getActivity()).CustomerId;
+        // CompanyId=((PreCheckoutActivity) getActivity()).CompanyId;
+        ShemeCode=((PreCheckoutActivity) getActivity()).ShemeCode;
 
          OrderAmount= TotaltalAmount;
 
@@ -708,12 +713,14 @@ public void showDialog(List<CouponModel> couponModelList) {
 
                     if(orderId != 0)
                     {
+                     /* SendSMS(orderId);*/
+
                         if(PaymentType == 2) {
 
                             Intent intent = new Intent(getActivity(), CheckoutActivity.class);
                             intent.putExtra("TransactionAmount", total);
                             intent.putExtra("orderId", orderId);
-
+                           intent.putExtra("ShemeCode",ShemeCode);
                             intent.putExtra("TransactionIdentifier", "TXN" + orderId);
                             intent.putExtra("TransactionReference", "ORD" + orderId);
                             intent.putExtra("ConsumerIdentifier", ConsumerIdentifier);
@@ -762,7 +769,40 @@ public void showDialog(List<CouponModel> couponModelList) {
     }
 
 
+  /*  public void SendSMS(int OrderId) {
 
+       StringRequest vrequest = new StringRequest(Request.Method.GET, SendSMSFor_Order + OrderId,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONObject obj = new JSONObject(response);
+
+
+                        } catch (JSONException e) {
+                            Toast.makeText(getContext(),e.getMessage(), Toast.LENGTH_LONG).show();
+                            //  e.printStackTrace();
+                        }
+                        finally {
+
+                            progressDialog.dismiss();;
+                        }
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                progressDialog.dismiss();
+                Toast.makeText(getContext(),error.getMessage(), Toast.LENGTH_LONG).show();
+                //  Toast.makeText(get(),error.getMessage(), Toast.LENGTH_LONG).show();
+                // Toast.makeText(this,error.getMessage(),Toast.LENGTH_LONG).show();
+            }
+        });
+
+        RequestQueue requestQueue = Volley.newRequestQueue(getContext());
+        requestQueue.add(vrequest);
+
+    }*/
 
 
 }

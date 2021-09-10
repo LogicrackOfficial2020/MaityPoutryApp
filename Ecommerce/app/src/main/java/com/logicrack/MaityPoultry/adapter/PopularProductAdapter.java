@@ -40,16 +40,18 @@ public class PopularProductAdapter extends RecyclerView.Adapter<PopularProductAd
     Gson gson;
     List<Cart> cartList = new ArrayList<>();
     String _quantity, _price, _attribute, _subtotal;
+    String Pincode;
 
     public PopularProductAdapter(List<Product> productList, Context context) {
         this.productList = productList;
         this.context = context;
     }
 
-    public PopularProductAdapter(List<Product> productList, Context context, String tag) {
+    public PopularProductAdapter(List<Product> productList, Context context, String tag,String Pincode) {
         this.productList = productList;
         this.context = context;
         Tag = tag;
+        this.Pincode=Pincode;
     }
 
     @NonNull
@@ -116,7 +118,7 @@ public class PopularProductAdapter extends RecyclerView.Adapter<PopularProductAd
                 _subtotal = String.valueOf(Double.parseDouble(_price) * Integer.parseInt(_quantity));
 
                 if (context instanceof MainActivity) {
-                    Cart cart = new Cart(product.getId(), product.getTitle(), product.getImage(), product.getCurrency(), _price, _attribute, _quantity, _subtotal);
+                    Cart cart = new Cart(product.getId(), product.getTitle(), product.getImage(), product.getCurrency(), _price, _attribute, _quantity, _subtotal,Pincode);
                     cartList = ((BaseActivity) context).getCartList();
                     cartList.add(cart);
 

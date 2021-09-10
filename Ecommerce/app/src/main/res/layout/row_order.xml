@@ -15,7 +15,9 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="vertical"
+            android:background="@color/grey_200"
+            android:id="@+id/lin_order">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -52,6 +54,17 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_10dp"
                     android:text="pending" />
+
+                <com.logicrack.MaityPoultry.customfonts.MyTextView
+                    android:id="@+id/deliveryotp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_10dp"
+                    android:textStyle="bold"
+                    android:textColor="@color/red_500"
+                    android:textSize="20sp"
+                    android:visibility="gone"
+                    android:text="123132322" />
 
 
             </LinearLayout>

@@ -59,6 +59,8 @@ public class PreCheckoutActivity extends BaseActivity implements CouponPopUpAdap
     public  String OrderShippingEmailId;
     public  String OrderShippingAddress;
     public  String OrderShippingContactNo;
+    public int CompanyId;
+    public String ShemeCode;
 
     @Override
     public void onMethodCallback(String couponcode,String couponamount) {
@@ -93,7 +95,7 @@ public class PreCheckoutActivity extends BaseActivity implements CouponPopUpAdap
 
         localStorage = new LocalStorage(getApplicationContext());
         gson = new Gson();
-      String  userString = localStorage.getUserLogin();
+        String  userString = localStorage.getUserLogin();
         User user = gson.fromJson(userString, User.class);
         Pin=user.getPrimaryOrderPincode();
 

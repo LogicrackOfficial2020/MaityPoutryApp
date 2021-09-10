@@ -193,7 +193,7 @@ String Pincode;
 
     private void setUpGridView(final List<Product> products) {
 
-        ProductGridAdapter gridAdapter = new ProductGridAdapter(products, getContext(), "New2");
+        ProductGridAdapter gridAdapter = new ProductGridAdapter(products, getContext(), "New2",Pincode);
         product_gridView.setAdapter(gridAdapter);
 
         //  prog_area.setVisibility(View.GONE);
@@ -222,7 +222,7 @@ String Pincode;
         nRecyclerView.setItemAnimator(new DefaultItemAnimator());
         nRecyclerView.setAdapter(pAdapter);*/
 
-        NewProductAdapter mAdapter = new NewProductAdapter(products, getContext(), "New2");
+        NewProductAdapter mAdapter = new NewProductAdapter(products, getContext(), "New2",Pincode);
         GridLayoutManager mGridLayoutManager = new GridLayoutManager(getContext(), 2);
         nRecyclerView.setLayoutManager(mGridLayoutManager);
         // RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());

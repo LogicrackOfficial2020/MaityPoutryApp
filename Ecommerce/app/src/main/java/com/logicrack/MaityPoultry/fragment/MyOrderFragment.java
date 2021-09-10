@@ -117,11 +117,17 @@ public class MyOrderFragment extends Fragment {
                                 String OrderDate = object.getString("OrderDate");
                                 String OrderAmount = object.getString("OrderAmount");
                                 String Status = object.getString("Status");
+                                int DeliveryOTP = object.getInt("DeliveryOTP");
+                                String OrderPaymentMode =object.getString("OrderPaymentModeName");
+                                String TransactionStatus =object.getString("TransactionStatusName");
+                                String OrderShippingContactNo =object.getString("OrderShippingContactNo");
+                                String OrderShippingAddress =object.getString("OrderShippingAddress");
+                                String OrderShippingEmailId=object.getString("OrderShippingEmailId");
+                                String CustomerName =object.getString("OrderShippingFname");
 
 
 
-
-                                Order obj = new Order(orderId,OrderNo,OrderDate,OrderAmount,OrderStatus,Status);
+                                Order obj = new Order(orderId,OrderNo,OrderDate,OrderAmount,OrderStatus,Status,DeliveryOTP,OrderPaymentMode,TransactionStatus,OrderShippingContactNo,OrderShippingAddress,OrderShippingEmailId,CustomerName);
                                 orders.add(obj);
 
 
